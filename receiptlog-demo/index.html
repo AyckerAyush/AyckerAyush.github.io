@@ -3,83 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt Scanner & Mileage Log - Interactive Animated App Demo</title>
-    <meta name="description" content="Experience how Receipt Scanner & Mileage Log works with live interactive simulated user flows: on-device OCR receipt scanning, GPS mileage logging, and CPA tax reports.">
+    <title>Receipt Scanner &amp; Mileage Log — 100% Offline Tax Deduction App</title>
+    <meta name="description" content="Interactive demo and complete feature guide for Receipt Scanner & Mileage Log. 100% offline, on-device neural OCR, dual-mode GPS mileage tracking, and CPA-ready tax reports.">
     <link rel="icon" type="image/png" href="assets/play_store_icon_512.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-main: #070B14;
-            --bg-surface: #0E1626;
-            --bg-card: #141F36;
-            --bg-card-hover: #1B2947;
-            --border: #233352;
-            --border-glow: #3B82F6;
+            --bg-canvas: #07090E;
+            --bg-surface: #0E131F;
+            --bg-card: #141B2D;
+            --bg-card-hover: #1A243B;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(59, 130, 246, 0.3);
+            
+            --emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.25);
+            --emerald-light: #34D399;
+            --blue: #3B82F6;
+            --blue-glow: rgba(59, 130, 246, 0.25);
+            --blue-light: #60A5FA;
+            --indigo: #6366F1;
+            --amber: #F59E0B;
+            
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
             --text-muted: #64748B;
-            --emerald: #10B981;
-            --emerald-bright: #34D399;
-            --emerald-glow: rgba(16, 185, 129, 0.25);
-            --royal-blue: #3B82F6;
-            --royal-glow: rgba(59, 130, 246, 0.3);
-            --amber: #F59E0B;
-            --purple: #8B5CF6;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 32px;
+            --radius-full: 9999px;
+            
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+            --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            --shadow-glow: 0 0 30px -5px rgba(59, 130, 246, 0.2);
         }
 
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
+            background-color: var(--bg-canvas);
             color: var(--text-primary);
+            font-family: var(--font-main);
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient Glow */
+        /* Ambient Glow Background */
         .ambient-glow {
             position: fixed;
-            top: -250px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 1000px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(16, 185, 129, 0.1) 40%, transparent 70%);
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-glow::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .ambient-glow::after {
+            content: '';
+            position: absolute;
+            top: 300px;
+            right: 15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(90px);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
             z-index: 1;
         }
 
-        /* Navigation Header */
-        header {
+        /* Navigation Bar */
+        .navbar {
             position: sticky;
             top: 0;
-            background: rgba(7, 11, 20, 0.88);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
             z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(7, 9, 14, 0.85);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 0;
         }
 
         .nav-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 72px;
         }
 
-        .brand {
+        .brand-link {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -88,162 +140,344 @@
         }
 
         .brand-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .brand-text h1 {
-            font-size: 1.15rem;
+        .brand-title {
+            font-size: 1.05rem;
             font-weight: 800;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.02em;
             line-height: 1.2;
         }
 
-        .brand-text span {
-            font-size: 0.75rem;
-            color: var(--emerald-bright);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .brand-pill {
+            font-size: 0.7rem;
+            color: var(--emerald-light);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 28px;
         }
 
-        .nav-link {
+        .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.92rem;
             font-weight: 600;
-            transition: color 0.2s;
+            transition: color 0.2s ease;
         }
 
-        .nav-link:hover {
+        .nav-links a:hover {
             color: var(--text-primary);
         }
 
-        .btn-playstore {
+        .nav-btn {
+            background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 0.88rem;
-            padding: 10px 20px;
-            border-radius: 9999px;
-            text-decoration: none;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-            transition: all 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .btn-playstore:hover {
+        .nav-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
-            background: linear-gradient(135deg, #1D4ED8, #1E40AF);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
         }
 
-        /* Hero */
+        /* Hero Section */
         .hero {
-            padding: 60px 0 40px;
+            padding: 64px 0 40px;
             text-align: center;
         }
 
-        .pill-badge {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            color: var(--emerald-bright);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            color: var(--blue-light);
             font-size: 0.82rem;
             font-weight: 700;
-            padding: 6px 18px;
-            border-radius: 9999px;
+            letter-spacing: 0.02em;
             margin-bottom: 20px;
-            letter-spacing: 0.5px;
         }
 
-        .hero h2 {
-            font-size: 2.85rem;
-            font-weight: 900;
-            letter-spacing: -1px;
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
             line-height: 1.15;
-            margin-bottom: 18px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 960px;
+            margin: 0 auto 20px;
         }
 
-        .hero h2 .gradient-text {
-            background: linear-gradient(135deg, #60A5FA 0%, #34D399 100%);
+        .hero-title span.gradient-emerald {
+            background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            font-size: 1.15rem;
+        .hero-title span.gradient-blue {
+            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
             color: var(--text-secondary);
-            max-width: 720px;
-            margin: 0 auto 30px;
+            max-width: 740px;
+            margin: 0 auto 32px;
             line-height: 1.6;
         }
 
-        /* ==========================================================================
-           INTERACTIVE DEMO ENGINE
-           ========================================================================== */
-        .demo-section {
-            padding: 50px 0 80px;
+        .hero-highlights-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 48px;
         }
 
-        .demo-container-card {
+        .highlight-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .highlight-chip svg {
+            color: var(--emerald);
+        }
+
+        /* =====================================================================
+           INTERACTIVE DEMO SHOWCASE SECTION
+           ===================================================================== */
+        .showcase-section {
+            padding: 20px 0 80px;
+        }
+
+        .showcase-wrapper {
             background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 28px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: var(--shadow-elevated), var(--shadow-glow);
             position: relative;
             overflow: hidden;
         }
 
-        .demo-layout {
+        .showcase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 36px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .showcase-title-area h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .showcase-title-area p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .tour-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tour-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tour-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tour-btn.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--emerald-light);
+        }
+
+        /* Mode Selection Tabs */
+        .showcase-tabs {
             display: grid;
-            grid-template-columns: 360px 1fr;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--blue);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
+        }
+
+        .tab-btn-step {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tab-btn.active .tab-btn-step {
+            color: var(--blue-light);
+        }
+
+        .tab-btn-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blue);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Showcase Main Grid: Phone + Detailed Explainer */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
             gap: 48px;
             align-items: center;
         }
 
-        /* Interactive Phone Frame */
-        .phone-frame {
-            position: relative;
-            width: 340px;
-            height: 680px;
-            background: #0B1120;
-            border-radius: 46px;
+        /* =====================================================================
+           ULTRA-REALISTIC SMARTPHONE MOCKUP FRAME
+           ===================================================================== */
+        .device-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-mockup {
+            width: 360px;
+            height: 730px;
+            background: #000000;
+            border-radius: 50px;
             padding: 12px;
-            border: 4px solid #2A3B58;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9),
-                        0 0 40px rgba(59, 130, 246, 0.25);
-            margin: 0 auto;
+            box-shadow: 
+                0 0 0 3px #2A3245,
+                0 0 0 6px #121622,
+                0 25px 60px -15px rgba(0, 0, 0, 0.9),
+                0 0 50px rgba(59, 130, 246, 0.15);
+            position: relative;
             user-select: none;
         }
 
+        /* Reflection Gloss on Screen */
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 20px;
+            right: 40px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            border-radius: 40px 40px 0 0;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #0B101D;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Dynamic Island */
         .phone-island {
             position: absolute;
-            top: 20px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 24px;
+            width: 110px;
+            height: 26px;
             background: #000000;
-            border-radius: 20px;
-            z-index: 50;
+            border-radius: var(--radius-full);
+            z-index: 40;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -251,669 +485,535 @@
         }
 
         .island-lens {
-            width: 9px;
-            height: 9px;
-            background: #1E293B;
+            width: 10px;
+            height: 10px;
+            background: #111827;
             border-radius: 50%;
-            border: 1px solid #334155;
+            border: 1px solid #1F2937;
         }
 
-        .island-mic {
-            width: 4px;
-            height: 4px;
-            background: #1E293B;
+        .island-indicator {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
+            background: var(--emerald);
+            box-shadow: 0 0 8px var(--emerald);
         }
 
-        /* Phone Screen Surface */
-        .phone-screen {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #0B1222;
-            border-radius: 36px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Simulated Phone Status Bar */
+        /* Screen Status Bar */
         .screen-status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 44px;
+            padding: 10px 22px 0;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
-            padding: 0 24px 6px;
             font-size: 0.72rem;
             font-weight: 700;
-            color: #E2E8F0;
-            z-index: 40;
-            background: rgba(11, 18, 34, 0.95);
+            color: #ffffff;
+            z-index: 35;
+            background: linear-gradient(180deg, rgba(11, 16, 29, 0.8) 0%, transparent 100%);
         }
 
         .status-pill {
             background: rgba(16, 185, 129, 0.2);
-            color: var(--emerald-bright);
+            color: var(--emerald-light);
+            border: 1px solid rgba(16, 185, 129, 0.35);
             padding: 2px 8px;
-            border-radius: 12px;
+            border-radius: var(--radius-full);
             font-size: 0.65rem;
             font-weight: 800;
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            letter-spacing: 0.04em;
             display: flex;
             align-items: center;
             gap: 4px;
         }
 
-        /* Simulated App Content Canvas */
-        .screen-content {
+        /* Screen Deck Container */
+        .screen-deck {
+            width: 100%;
+            height: 100%;
             position: relative;
-            flex: 1;
-            overflow: hidden;
         }
 
-        /* Animated Touch Cursor */
-        .virtual-finger {
-            position: absolute;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.35);
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 16px rgba(59, 130, 246, 0.8);
-            pointer-events: none;
-            z-index: 100;
-            transform: translate(-50%, -50%) scale(1);
-            transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-            opacity: 0;
-        }
-
-        .virtual-finger.tap {
-            transform: translate(-50%, -50%) scale(0.75);
-            background: rgba(16, 185, 129, 0.8);
-            box-shadow: 0 0 25px #10B981;
-        }
-
-        /* Touch Ripple */
-        .touch-ripple {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid var(--emerald-bright);
-            transform: translate(-50%, -50%) scale(0);
-            pointer-events: none;
-            z-index: 99;
-            opacity: 0;
-        }
-
-        .touch-ripple.active {
-            animation: rippleEffect 0.5s ease-out forwards;
-        }
-
-        /* Individual Simulated Screens */
-        .sim-view {
+        .screen-slide {
             position: absolute;
             inset: 0;
-            display: flex;
-            flex-direction: column;
             opacity: 0;
-            pointer-events: none;
-            transform: scale(0.96);
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            visibility: hidden;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.97);
+            overflow: hidden;
         }
 
-        .sim-view.active {
+        .screen-slide.active {
             opacity: 1;
-            pointer-events: auto;
+            visibility: visible;
             transform: scale(1);
-        }
-
-        /* VIEW 1: DASHBOARD */
-        .dash-view {
-            padding: 16px;
-            background: #0B1222;
-            overflow-y: auto;
-        }
-
-        .dash-header {
-            margin-bottom: 14px;
-        }
-
-        .dash-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #ffffff;
-        }
-
-        .tax-chip-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0 14px;
-        }
-
-        .sim-chip {
-            background: #162238;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: #93C5FD;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .deduction-card {
-            background: linear-gradient(135deg, #131E33, #1A2845);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .deduction-label {
-            font-size: 0.72rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .deduction-amount {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #ffffff;
-            margin: 4px 0 12px;
-            letter-spacing: -0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .deduction-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 10px;
-        }
-
-        .split-item {
-            font-size: 0.75rem;
-        }
-
-        .split-item span {
-            color: var(--text-muted);
-            display: block;
-            font-size: 0.65rem;
-        }
-
-        .split-item strong {
-            color: #E2E8F0;
-            font-size: 0.85rem;
-        }
-
-        /* Action Buttons */
-        .action-btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .sim-btn-action {
-            padding: 12px 10px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            border: none;
-            transition: transform 0.15s;
-        }
-
-        .sim-btn-scan {
-            background: var(--emerald);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-
-        .sim-btn-mileage {
-            background: var(--royal-blue);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-        }
-
-        .recent-feed-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 14px 0 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-        }
-
-        .feed-card {
-            background: #142036;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s;
-        }
-
-        .feed-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feed-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: #1E2D4A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-
-        .feed-text h5 {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .feed-text p {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-
-        .feed-amount {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #ffffff;
-            text-align: right;
-        }
-
-        .badge-pakka {
-            display: inline-block;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--emerald-bright);
-            font-size: 0.6rem;
-            padding: 1px 5px;
-            border-radius: 4px;
-            margin-left: 4px;
-        }
-
-        /* VIEW 2: CAMERA OCR SCANNER */
-        .camera-view {
-            background: #000000;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 16px 16px 24px;
-        }
-
-        .cam-top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 700;
             z-index: 10;
         }
 
-        .viewfinder-box {
-            position: absolute;
-            top: 60px;
-            left: 20px;
-            right: 20px;
-            bottom: 100px;
-            border: 2px dashed rgba(59, 130, 246, 0.5);
-            border-radius: 16px;
-            overflow: hidden;
-            background: url('assets/02_receipt_scanner.png') center/cover no-repeat;
+        .screen-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .laser-scan-line {
+        /* =====================================================================
+           DYNAMIC INTERACTIVE OVERLAYS ON PHONE
+           ===================================================================== */
+        
+        /* 1. CAMERA OCR SCANNER OVERLAY */
+        .camera-scanner-wrapper {
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .camera-backdrop {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, #1a2336 0%, #080d1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .receipt-paper {
+            width: 250px;
+            height: 480px;
+            background: #FAFAFA;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            position: relative;
+            border-top: 4px solid #E2E8F0;
+        }
+
+        .receipt-paper-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Laser Sweep Line */
+        .laser-sweep {
             position: absolute;
             left: 0;
             right: 0;
             height: 3px;
             background: linear-gradient(90deg, transparent, #34D399, #10B981, #34D399, transparent);
             box-shadow: 0 0 15px #10B981, 0 0 25px #10B981;
-            animation: laserAnimate 2s ease-in-out infinite alternate;
+            z-index: 25;
+            animation: laserSweepLoop 2.4s ease-in-out infinite alternate;
         }
 
-        .detected-box {
+        @keyframes laserSweepLoop {
+            0% { top: 12%; }
+            100% { top: 88%; }
+        }
+
+        /* Scanning Bounding Box Highlights */
+        .scan-box {
             position: absolute;
-            border: 2px solid #10B981;
-            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid var(--emerald);
+            background: rgba(16, 185, 129, 0.22);
             border-radius: 4px;
-            padding: 2px 6px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: #ffffff;
-            opacity: 0;
-            transform: scale(0.9);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+            z-index: 20;
             transition: all 0.3s ease;
         }
 
-        .box-merchant { top: 120px; left: 30px; }
-        .box-date { top: 180px; left: 30px; }
-        .box-total { top: 260px; right: 30px; border-color: #3B82F6; background: rgba(59, 130, 246, 0.25); }
-        .box-tax { top: 310px; right: 30px; }
+        .scan-box-tag {
+            position: absolute;
+            top: -18px;
+            left: 0;
+            background: var(--emerald);
+            color: #ffffff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
 
-        .cam-bottom-bar {
-            position: relative;
-            z-index: 10;
+        .box-merchant {
+            top: 100px;
+            left: 30px;
+            right: 30px;
+            height: 36px;
+        }
+
+        .box-date {
+            top: 175px;
+            left: 30px;
+            width: 120px;
+            height: 24px;
+        }
+
+        .box-tax {
+            bottom: 155px;
+            right: 30px;
+            width: 100px;
+            height: 24px;
+        }
+
+        .box-total {
+            bottom: 115px;
+            left: 30px;
+            right: 30px;
+            height: 32px;
+            border-color: #3B82F6;
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        .box-total .scan-box-tag {
+            background: #3B82F6;
+        }
+
+        .cam-controls-bar {
+            position: absolute;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 30;
+            padding: 0 20px;
+        }
+
+        .cam-shutter-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            background: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .cam-shutter-inner {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #ffffff;
+            transition: transform 0.15s ease;
+        }
+
+        /* 2. GPS MILEAGE ANIMATION OVERLAY */
+        .gps-overlay-card {
+            position: absolute;
+            bottom: 60px;
+            left: 16px;
+            right: 16px;
+            background: rgba(14, 19, 31, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            backdrop-filter: blur(12px);
+            z-index: 25;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .gps-overlay-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .gps-live-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--blue-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .gps-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blue);
+            box-shadow: 0 0 10px var(--blue);
+            animation: pulseGlow 1.5s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+
+        .gps-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .gps-val-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .gps-val-number {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: var(--font-mono);
+        }
+
+        .gps-val-number.earned {
+            color: var(--emerald-light);
+        }
+
+        /* 3. DUAL ACCOUNTING FILTER OVERLAY */
+        .pakka-filter-pill-bar {
+            position: absolute;
+            top: 125px;
+            left: 20px;
+            right: 20px;
+            background: rgba(14, 19, 31, 0.95);
+            border: 1px solid var(--border-highlight);
+            padding: 8px;
+            border-radius: var(--radius-md);
+            z-index: 25;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .pill-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.72rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .pill-btn.active-pakka {
+            background: var(--emerald);
+            color: #ffffff;
+        }
+
+        .pill-btn.inactive {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        /* 4. CPA TAX REPORT POPUP OVERLAY */
+        .cpa-report-sheet {
+            position: absolute;
+            top: 100px;
+            left: 18px;
+            right: 18px;
+            bottom: 60px;
+            background: #ffffff;
+            color: #0F172A;
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            z-index: 25;
+            overflow-y: auto;
+            transform: scale(0.96);
+            transition: transform 0.3s ease;
+        }
+
+        .sheet-header {
+            border-bottom: 2px solid #0F172A;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .sheet-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.01em;
+        }
+
+        .sheet-subtitle {
+            font-size: 0.65rem;
+            color: #64748B;
+            font-weight: 700;
+        }
+
+        .sheet-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed #E2E8F0;
+        }
+
+        .sheet-line strong {
+            font-family: var(--font-mono);
+            color: #0F172A;
+        }
+
+        .sheet-total-row {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 2px solid #0F172A;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
+        .sheet-total-row span.amt {
+            color: #059669;
+            font-family: var(--font-mono);
+        }
+
+        /* =====================================================================
+           RIGHT COLUMN: DETAILED EXPLAINER CARDS & INSIGHTS
+           ===================================================================== */
+        .explainer-deck {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
         }
 
-        .shutter-btn {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 4px solid rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        /* VIEW 3: LIVE GPS MILEAGE TRACKER */
-        .gps-view {
-            padding: 16px;
-            background: #0B1222;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .gps-map-card {
-            height: 280px;
-            background: #111B30;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .gps-grid-lines {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-
-        .svg-route {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .route-path {
-            stroke-dasharray: 400;
-            stroke-dashoffset: 400;
-            animation: drawRoute 3s ease forwards infinite;
-        }
-
-        .moving-car {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--royal-blue);
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 15px var(--royal-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            color: #ffffff;
-            z-index: 10;
-        }
-
-        .gps-stats-box {
-            background: #142036;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 14px 0;
-        }
-
-        .gps-meter-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .gps-dist-val {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #ffffff;
-        }
-
-        .gps-deduction-val {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--emerald-bright);
-        }
-
-        /* VIEW 4: CPA REPORT EXPORT */
-        .reports-view {
-            padding: 16px;
-            background: #0B1222;
-        }
-
-        .pdf-preview-sheet {
-            background: #ffffff;
-            color: #0F172A;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            transform: translateY(0);
-            transition: transform 0.3s;
-        }
-
-        .pdf-header {
-            border-bottom: 2px solid #0F172A;
-            padding-bottom: 6px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .pdf-header h4 { font-size: 0.8rem; font-weight: 800; }
-        .pdf-header span { font-size: 0.6rem; color: #64748B; font-weight: 700; }
-
-        .pdf-line {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.68rem;
-            padding: 3px 0;
-            border-bottom: 1px dotted #CBD5E1;
-        }
-
-        .pdf-total-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.82rem;
-            font-weight: 800;
-            margin-top: 6px;
-            color: #0F172A;
-        }
-
-        /* Interactive Scenario Controller (Side Panel) */
-        .scenario-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .scenario-card {
+        .explainer-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 22px;
-            cursor: pointer;
-            transition: all 0.25s ease;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
-        .scenario-card:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-            background: var(--bg-card-hover);
-            transform: translateX(4px);
+        .explainer-card.active {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, rgba(20, 27, 45, 0.9) 0%, rgba(26, 36, 59, 0.9) 100%);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
         }
 
-        .scenario-card.active {
-            background: rgba(27, 41, 71, 0.95);
-            border-color: var(--royal-blue);
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
-        }
-
-        .scenario-card.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, var(--royal-blue), var(--emerald-bright));
-        }
-
-        .scenario-top {
+        .explainer-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 14px;
         }
 
-        .scenario-tag {
-            font-size: 0.72rem;
+        .explainer-tag {
+            font-size: 0.75rem;
             font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 6px;
-            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
             background: rgba(59, 130, 246, 0.15);
-            color: #93C5FD;
+            color: var(--blue-light);
             border: 1px solid rgba(59, 130, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .scenario-card.active .scenario-tag {
+        .explainer-tag.emerald {
             background: rgba(16, 185, 129, 0.15);
-            color: var(--emerald-bright);
+            color: var(--emerald-light);
             border-color: rgba(16, 185, 129, 0.3);
         }
 
-        .scenario-title {
-            font-size: 1.12rem;
+        .explainer-title {
+            font-size: 1.45rem;
             font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-
-        .scenario-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
+            letter-spacing: -0.02em;
             margin-bottom: 12px;
+            line-height: 1.3;
         }
 
-        .flow-indicators {
+        .explainer-desc {
+            color: var(--text-secondary);
+            font-size: 0.96rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .explainer-bullets {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .bullet-item {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 600;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
         }
 
-        .flow-bullet {
-            width: 6px;
-            height: 6px;
+        .bullet-icon {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--royal-blue);
-        }
-
-        /* Auto-Tour Bar */
-        .tour-bar {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--emerald-light);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 16px;
-            margin-bottom: 8px;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
-        .tour-toggle-btn {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid var(--royal-blue);
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tour-toggle-btn:hover {
-            background: var(--royal-blue);
-        }
-
-        /* ==========================================================================
-           BENTO GRID FEATURES
-           ========================================================================== */
-        .features-section {
-            padding: 90px 0;
-            border-top: 1px solid var(--border);
+        /* =====================================================================
+           BENTO GRID FEATURES SECTION
+           ===================================================================== */
+        .section {
+            padding: 80px 0;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 48px;
+            max-width: 760px;
+            margin: 0 auto 56px;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--emerald-light);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+            display: inline-block;
         }
 
         .section-title {
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
             font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
 
         .section-subtitle {
             color: var(--text-secondary);
             font-size: 1.05rem;
-            max-width: 600px;
-            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .bento-grid {
@@ -924,176 +1024,267 @@
 
         .bento-card {
             background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 32px 28px;
-            transition: all 0.3s;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             position: relative;
+            overflow: hidden;
         }
 
         .bento-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-elevated);
         }
 
-        .bento-card.featured {
+        .bento-card.col-span-2 {
             grid-column: span 2;
         }
 
-        .bento-icon {
+        .bento-icon-box {
             width: 48px;
             height: 48px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: var(--blue-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 18px;
-            background: rgba(59, 130, 246, 0.12);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            color: var(--royal-blue);
+            margin-bottom: 20px;
         }
 
-        .bento-icon.emerald {
+        .bento-icon-box.emerald {
             background: rgba(16, 185, 129, 0.12);
             border-color: rgba(16, 185, 129, 0.25);
-            color: var(--emerald-bright);
+            color: var(--emerald-light);
+        }
+
+        .bento-icon-box.amber {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.25);
+            color: var(--amber);
         }
 
         .bento-card h3 {
             font-size: 1.25rem;
             font-weight: 800;
-            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+            margin-bottom: 12px;
         }
 
         .bento-card p {
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        /* =====================================================================
+           HOW IT WORKS 3-STEP SECTION
+           ===================================================================== */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            position: relative;
+        }
+
+        .step-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 100%);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+        }
+
+        .step-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
             color: var(--text-secondary);
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
-        /* ==========================================================================
-           FAQ ACCORDION
-           ========================================================================== */
-        .faq-section {
-            padding: 90px 0;
-            border-top: 1px solid var(--border);
-        }
-
-        .faq-list {
-            max-width: 820px;
-            margin: 40px auto 0;
+        /* =====================================================================
+           FAQ ACCORDION SECTION
+           ===================================================================== */
+        .faq-wrapper {
+            max-width: 840px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
         .faq-item {
             background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s ease;
         }
 
-        .faq-item:hover {
+        .faq-item.active {
             border-color: rgba(59, 130, 246, 0.4);
         }
 
         .faq-question {
-            padding: 20px 24px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 22px 24px;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            cursor: pointer;
-            user-select: none;
-            font-weight: 700;
-            font-size: 1.02rem;
-            color: var(--text-primary);
+            gap: 16px;
         }
 
-        .faq-chevron {
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.1rem;
-            color: var(--royal-blue);
-            transition: transform 0.25s ease;
+            font-weight: 700;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
         }
 
-        .faq-item.open .faq-chevron {
-            transform: rotate(180deg);
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blue-light);
         }
 
         .faq-answer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.35s ease, padding 0.35s ease;
-            color: var(--text-secondary);
-            font-size: 0.92rem;
-            line-height: 1.65;
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
             padding: 0 24px;
-        }
-
-        .faq-item.open .faq-answer {
-            padding: 0 24px 22px 24px;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 50px 0 40px;
-            background: #05080F;
-            text-align: center;
             color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-bottom: 22px;
+        }
+
+        /* =====================================================================
+           FOOTER
+           ===================================================================== */
+        footer {
+            background: #05070B;
+            border-top: 1px solid var(--border-subtle);
+            padding: 60px 0 32px;
+            text-align: center;
             font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .footer-links {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 32px;
         }
 
         .footer-link {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.2s;
+            font-weight: 600;
+            transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--royal-blue);
+            color: var(--text-primary);
         }
 
-        /* KEYFRAME ANIMATIONS */
-        @keyframes laserAnimate {
-            0% { top: 10px; opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { top: 90%; opacity: 0.3; }
+        .footer-copy {
+            font-size: 0.82rem;
+            color: var(--text-muted);
         }
 
-        @keyframes rippleEffect {
-            0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .device-container {
+                order: 1;
+            }
+            .explainer-deck {
+                order: 2;
+            }
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bento-card.col-span-2 {
+                grid-column: span 2;
+            }
         }
 
-        @keyframes drawRoute {
-            0% { stroke-dashoffset: 400; }
-            100% { stroke-dashoffset: 0; }
-        }
-
-        @media (max-width: 992px) {
-            .hero h2 { font-size: 2.3rem; }
-            .demo-layout { grid-template-columns: 1fr; }
-            .bento-grid { grid-template-columns: 1fr; }
-            .bento-card.featured { grid-column: span 1; }
-        }
-
-        @media (max-width: 640px) {
-            .nav-links { display: none; }
-            .demo-container-card { padding: 20px; }
-            .phone-frame { width: 300px; height: 600px; }
+        @media (max-width: 768px) {
+            .showcase-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bento-grid, .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .bento-card.col-span-2 {
+                grid-column: span 1;
+            }
+            .nav-links {
+                display: none;
+            }
+            .phone-mockup {
+                width: 320px;
+                height: 650px;
+            }
+            .showcase-wrapper {
+                padding: 24px 16px;
+            }
         }
     </style>
 </head>
@@ -1101,449 +1292,651 @@
 
     <div class="ambient-glow"></div>
 
-    <!-- Navigation Bar -->
-    <header>
-        <div class="container nav-inner">
-            <a href="#" class="brand">
-                <img src="assets/play_store_icon_512.png" alt="App Icon" class="brand-icon">
-                <div class="brand-text">
-                    <h1>Receipt Scanner &amp; Mileage Log</h1>
-                    <span>100% Offline • Zero-Server</span>
-                </div>
-            </a>
-            <nav class="nav-links">
-                <a href="#interactive-simulator" class="nav-link">Live Simulated Demo</a>
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#faqs" class="nav-link">FAQs</a>
-                <a href="https://ayckerayush.github.io/receiptlog-privacy/" class="nav-link" target="_blank">Privacy Policy</a>
-            </nav>
-            <a href="https://play.google.com/store/apps/details?id=com.aycker.receiptlog" class="btn-playstore" target="_blank" rel="noopener">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3.609 1.814L13.792 12 3.61 22.186A2.25 2.25 0 0 1 3 20.625V3.375c0-.608.237-1.162.609-1.561zm11.235 11.235l2.256-2.256-9.878-5.704 7.622 7.96zm0-2.098L7.222 2.99l9.878 5.704-2.256 2.255zm2.098 1.049l3.528 2.036c.92.531.92 1.401 0 1.932l-3.528 2.036-2.098-2.098 2.098-2.098z"/>
-                </svg>
-                Get on Google Play
-            </a>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="brand-link">
+                    <img src="assets/play_store_icon_512.png" alt="Receipt Scanner App Icon" class="brand-icon">
+                    <div>
+                        <div class="brand-title">Receipt Scanner &amp; Mileage Log</div>
+                        <div class="brand-pill">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            100% Offline • Zero Cloud Uploads
+                        </div>
+                    </div>
+                </a>
+
+                <nav class="nav-links">
+                    <a href="#interactive-demo">Interactive Demo</a>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#faqs">FAQs</a>
+                    <a href="https://ayckerayush.github.io/receiptlog-privacy/" target="_blank">Privacy Policy</a>
+                </nav>
+
+                <a href="#interactive-demo" class="nav-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Explore App Tour
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <div class="pill-badge">
-                <span>⚡</span> On-Device Neural OCR • GPS Mileage Logging • Zero Cloud Uploads
+            <div class="hero-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Engineered for Contractors, Freelancers, Gig Drivers &amp; Small Businesses
             </div>
-            <h2>
-                See Exactly How It Works.<br>
-                <span class="gradient-text">Live Interactive App Simulation</span>
-            </h2>
-            <p>
-                Watch live user interactions below. See how receipts are recognized by on-device AI, how GPS drives compute statutory tax deductions in real-time, and how CPA reports are generated without internet.
+
+            <h1 class="hero-title">
+                Turn Crumpled Receipts &amp; Daily Drives into <br>
+                <span class="gradient-emerald">IRS-Ready Tax Deductions.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Point and scan receipts with on-device neural OCR, track GPS drives in real-time, and export itemized Schedule C reports. Your financial data stays 100% on your device in secure local SQLite storage.
             </p>
-        </div>
-    </section>
 
-    <!-- ==========================================================================
-         INTERACTIVE SIMULATED DEMO WORKBENCH
-         ========================================================================== -->
-    <section class="demo-section" id="interactive-simulator">
-        <div class="container">
-            <div class="demo-container-card">
-                <div class="demo-layout">
-
-                    <!-- Mobile Phone Simulator -->
-                    <div class="phone-frame">
-                        <div class="phone-island">
-                            <div class="island-lens"></div>
-                            <div class="island-mic"></div>
-                        </div>
-
-                        <div class="phone-screen" id="simScreen">
-                            <!-- Virtual Finger & Ripple -->
-                            <div class="virtual-finger" id="virtualFinger"></div>
-                            <div class="touch-ripple" id="touchRipple"></div>
-
-                            <!-- Status Bar -->
-                            <div class="screen-status-bar">
-                                <span>9:41</span>
-                                <div class="status-pill">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                    </svg>
-                                    100% OFFLINE
-                                </div>
-                                <span>100% 🔋</span>
-                            </div>
-
-                            <div class="screen-content">
-                                <!-- VIEW 1: DASHBOARD -->
-                                <div class="sim-view active" id="viewDashboard">
-                                    <div class="dash-view">
-                                        <div class="dash-header">
-                                            <div class="dash-title">Receipt Scanner &amp;<br>Mileage Log</div>
-                                            <div class="tax-chip-row">
-                                                <div class="sim-chip">2026 Tax Year • IRS ($0.76/mi) ▼</div>
-                                                <div class="sim-chip" style="color: var(--emerald-bright);">🔒 SQLite Encrypted</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="deduction-card">
-                                            <div class="deduction-label">Total 2026 Tax Deductions</div>
-                                            <div class="deduction-amount" id="dashTotal">$335.31</div>
-                                            <div class="deduction-split">
-                                                <div class="split-item">
-                                                    <span>Receipts (4)</span>
-                                                    <strong id="dashReceipts">$270.48</strong>
-                                                </div>
-                                                <div class="split-item">
-                                                    <span>Mileage (85.3 mi)</span>
-                                                    <strong id="dashMileage">$64.83</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="action-btn-row">
-                                            <button class="sim-btn-action sim-btn-scan" id="simScanBtn" onclick="runFlow(0)">
-                                                📷 Scan Receipt
-                                            </button>
-                                            <button class="sim-btn-action sim-btn-mileage" id="simMileageBtn" onclick="runFlow(1)">
-                                                🚗 Log Mileage
-                                            </button>
-                                        </div>
-
-                                        <div class="recent-feed-header">
-                                            <span>Recent Itemized Entries</span>
-                                            <span style="color: var(--royal-blue); cursor: pointer;">See All</span>
-                                        </div>
-
-                                        <div class="feed-card" id="newlyAddedCard" style="display: none; border-color: var(--emerald-bright); background: rgba(16, 185, 129, 0.1);">
-                                            <div class="feed-left">
-                                                <div class="feed-icon">⛽</div>
-                                                <div class="feed-text">
-                                                    <h5>Shell Oil #4082 <span class="badge-pakka">Pakka</span></h5>
-                                                    <p>Fuel &amp; Auto • Just now</p>
-                                                </div>
-                                            </div>
-                                            <div class="feed-amount">+$64.19</div>
-                                        </div>
-
-                                        <div class="feed-card">
-                                            <div class="feed-left">
-                                                <div class="feed-icon">🛠</div>
-                                                <div class="feed-text">
-                                                    <h5>The Home Depot <span class="badge-pakka">Pakka</span></h5>
-                                                    <p>Equipment • Nov 18, 2026</p>
-                                                </div>
-                                            </div>
-                                            <div class="feed-amount">$139.04</div>
-                                        </div>
-
-                                        <div class="feed-card">
-                                            <div class="feed-left">
-                                                <div class="feed-icon">🚗</div>
-                                                <div class="feed-text">
-                                                    <h5>Gig Delivery Shift</h5>
-                                                    <p>42.8 mi • Nov 16, 2026</p>
-                                                </div>
-                                            </div>
-                                            <div class="feed-amount" style="color: var(--emerald-bright);">+$32.53</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- VIEW 2: CAMERA OCR SCANNER -->
-                                <div class="sim-view" id="viewCamera">
-                                    <div class="camera-view" style="height: 100%;">
-                                        <div class="cam-top-bar">
-                                            <span>Auto-Detect ON</span>
-                                            <span>⚡ Offline Neural OCR</span>
-                                        </div>
-
-                                        <div class="viewfinder-box">
-                                            <div class="laser-scan-line" id="camLaser"></div>
-                                            <div class="detected-box box-merchant" id="boxMerchant">MERCHANT: Shell Oil #4082</div>
-                                            <div class="detected-box box-date" id="boxDate">DATE: Nov 20, 2026</div>
-                                            <div class="detected-box box-total" id="boxTotal">TOTAL: $64.19</div>
-                                            <div class="detected-box box-tax" id="boxTax">TAX: $4.89</div>
-                                        </div>
-
-                                        <div class="cam-bottom-bar">
-                                            <button class="shutter-btn" id="camShutter"></button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- VIEW 3: LIVE GPS MILEAGE DRIVE -->
-                                <div class="sim-view" id="viewGps">
-                                    <div class="gps-view" style="height: 100%;">
-                                        <div style="font-size: 0.82rem; font-weight: 800; color: #ffffff; display: flex; justify-content: space-between;">
-                                            <span>🛰 Live GPS Breadcrumbs</span>
-                                            <span style="color: var(--emerald-bright);">Accuracy: 4.8m</span>
-                                        </div>
-
-                                        <div class="gps-map-card">
-                                            <div class="gps-grid-lines"></div>
-                                            <svg class="svg-route" viewBox="0 0 280 200">
-                                                <path class="route-path" d="M 30 170 Q 90 40 160 120 T 250 50" fill="none" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
-                                            </svg>
-                                            <div class="moving-car" id="simCar" style="left: 30px; top: 160px;">🚗</div>
-                                        </div>
-
-                                        <div class="gps-stats-box">
-                                            <div class="gps-meter-row">
-                                                <div>
-                                                    <span style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700;">DISTANCE (IRS $0.76/MI)</span>
-                                                    <div class="gps-dist-val" id="gpsMiles">0.0 mi</div>
-                                                </div>
-                                                <div style="text-align: right;">
-                                                    <span style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700;">DEDUCTION EARNED</span>
-                                                    <div class="gps-deduction-val" id="gpsEarned">+$0.00</div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <button class="sim-btn-action sim-btn-scan" id="btnStopTrip" style="width: 100%; padding: 14px; font-size: 0.85rem;">
-                                            🏁 Complete &amp; Save Trip
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- VIEW 4: CPA TAX REPORT PREVIEW -->
-                                <div class="sim-view" id="viewReports">
-                                    <div class="reports-view" style="height: 100%; overflow-y: auto;">
-                                        <div style="font-size: 0.85rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; display: flex; justify-content: space-between;">
-                                            <span>CPA Tax Summary (2026)</span>
-                                            <span style="color: var(--emerald-bright);">Audit-Ready</span>
-                                        </div>
-
-                                        <div class="pdf-preview-sheet" id="pdfSheet">
-                                            <div class="pdf-header">
-                                                <h4>SCHEDULE C TAX DEDUCTIONS</h4>
-                                                <span>IRS FORM 1040</span>
-                                            </div>
-                                            <div class="pdf-line"><span>Fuel &amp; Auto (Pakka)</span><strong>$64.19</strong></div>
-                                            <div class="pdf-line"><span>Tools &amp; Equipment</span><strong>$139.04</strong></div>
-                                            <div class="pdf-line"><span>Office Supplies</span><strong>$48.50</strong></div>
-                                            <div class="pdf-line"><span>Meals &amp; Dining</span><strong>$18.75</strong></div>
-                                            <div class="pdf-line"><span>Business Mileage (85.3 mi)</span><strong>$64.83</strong></div>
-                                            <div class="pdf-total-row">
-                                                <span>TOTAL DEDUCTIBLE:</span>
-                                                <strong style="color: #059669;">$335.31</strong>
-                                            </div>
-                                            <div style="margin-top: 10px; font-size: 0.62rem; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 6px;">
-                                                📎 4 Thermal Receipt Photos Attached in Appendix
-                                            </div>
-                                        </div>
-
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                                            <button class="sim-btn-action sim-btn-scan" style="padding: 10px; font-size: 0.72rem;">📄 Export PDF</button>
-                                            <button class="sim-btn-action sim-btn-mileage" style="padding: 10px; font-size: 0.72rem;">📊 Export CSV</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Side Scenario Controller & Explanations -->
-                    <div class="scenario-panel">
-                        <div class="tour-bar">
-                            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);">Interactive Walkthrough Modes:</span>
-                            <button class="tour-toggle-btn" id="tourBtn" onclick="toggleTour()">Auto-Tour: Playing ⏸</button>
-                        </div>
-
-                        <!-- Scenario 1 -->
-                        <div class="scenario-card active" id="cardScenario0" onclick="runFlow(0)">
-                            <div class="scenario-top">
-                                <span class="scenario-tag">AI Receipt OCR</span>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Step 1</span>
-                            </div>
-                            <div class="scenario-title">1. Point, Snap &amp; Instant OCR Extraction</div>
-                            <p class="scenario-desc">
-                                Watch the virtual finger tap <strong>Scan Receipt</strong>. The camera viewfinder opens and an on-device neural laser sweeps over the receipt, instantly extracting merchant name, sales tax, and total with zero server latency.
-                            </p>
-                            <div class="flow-indicators">
-                                <span class="flow-bullet"></span> Tap Camera ➔ <span class="flow-bullet"></span> AI Laser Scan ➔ <span class="flow-bullet"></span> Auto-Fill &amp; Save
-                            </div>
-                        </div>
-
-                        <!-- Scenario 2 -->
-                        <div class="scenario-card" id="cardScenario1" onclick="runFlow(1)">
-                            <div class="scenario-top">
-                                <span class="scenario-tag">GPS Mileage Drive</span>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Step 2</span>
-                            </div>
-                            <div class="scenario-title">2. Live GPS Breadcrumbs &amp; Rate Math</div>
-                            <p class="scenario-desc">
-                                Watch a live delivery drive. The GPS engine tracks the route, dynamically multiplying distance by statutory tax rates (e.g. IRS 76¢/mi) and updating earned tax deductions in real-time.
-                            </p>
-                            <div class="flow-indicators">
-                                <span class="flow-bullet"></span> Start Trip ➔ <span class="flow-bullet"></span> Route Breadcrumb ➔ <span class="flow-bullet"></span> Live $ Deduction
-                            </div>
-                        </div>
-
-                        <!-- Scenario 3 -->
-                        <div class="scenario-card" id="cardScenario2" onclick="runFlow(2)">
-                            <div class="scenario-top">
-                                <span class="scenario-tag">Audit-Proof Records</span>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Step 3</span>
-                            </div>
-                            <div class="scenario-title">3. Pakka vs. Kachha Dual Accounting</div>
-                            <p class="scenario-desc">
-                                Keep official GST/VAT invoices (*Pakka*) strictly separated from informal cash slips (*Kachha*). Eliminates audit panic when submitting files to tax accountants.
-                            </p>
-                            <div class="flow-indicators">
-                                <span class="flow-bullet"></span> One-Tap Filter ➔ <span class="flow-bullet"></span> Category Breakdown ➔ <span class="flow-bullet"></span> Clean Audit Trail
-                            </div>
-                        </div>
-
-                        <!-- Scenario 4 -->
-                        <div class="scenario-card" id="cardScenario3" onclick="runFlow(3)">
-                            <div class="scenario-top">
-                                <span class="scenario-tag">CPA-Ready Tax Reports</span>
-                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Step 4</span>
-                            </div>
-                            <div class="scenario-title">4. Generate CPA PDF &amp; CSV Exports</div>
-                            <p class="scenario-desc">
-                                See the app compile an itemized PDF deduction report formatted for Schedule C / Form 2106, complete with scaled receipt photo attachments and universal CSV spreadsheets.
-                            </p>
-                            <div class="flow-indicators">
-                                <span class="flow-bullet"></span> Itemized PDF ➔ <span class="flow-bullet"></span> Universal CSV ➔ <span class="flow-bullet"></span> Share via Email
-                            </div>
-                        </div>
-                    </div>
+            <div class="hero-highlights-bar">
+                <div class="highlight-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Zero Cloud Uploads (Airplane Ready)
+                </div>
+                <div class="highlight-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Sub-250ms On-Device Neural OCR
+                </div>
+                <div class="highlight-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    45+ Statutory Tax Jurisdiction Rates
+                </div>
+                <div class="highlight-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Pakka vs. Kachha Dual Accounting
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================================================
-         BENTO GRID FEATURES
-         ========================================================================== -->
-    <section class="features-section" id="features">
+    <!-- =========================================================================
+         CORE INTERACTIVE DEMO SHOWCASE SECTION
+         ========================================================================= -->
+    <section class="showcase-section" id="interactive-demo">
+        <div class="container">
+            <div class="showcase-wrapper">
+
+                <!-- Header + Tour Controls -->
+                <div class="showcase-header">
+                    <div class="showcase-title-area">
+                        <h2>Interactive App Walkthrough</h2>
+                        <p>Experience how effortlessly each feature runs on-device. Click any step or let the tour play.</p>
+                    </div>
+
+                    <div class="tour-controls">
+                        <button class="tour-btn active" id="btnToggleTour" onclick="toggleTour()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="tourIcon">
+                                <rect x="6" y="4" width="4" height="16"/>
+                                <rect x="14" y="4" width="4" height="16"/>
+                            </svg>
+                            <span id="tourLabel">Auto-Tour: Playing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Step Tabs -->
+                <div class="showcase-tabs">
+                    <button class="tab-btn active" id="tab0" onclick="selectFlow(0)">
+                        <div class="tab-btn-step">
+                            <span>Step 1</span>
+                            <span class="tab-badge">OCR</span>
+                        </div>
+                        <div class="tab-btn-label">
+                            📷 Point &amp; Scan Receipt
+                        </div>
+                        <div class="tab-progress" id="progress0"></div>
+                    </button>
+
+                    <button class="tab-btn" id="tab1" onclick="selectFlow(1)">
+                        <div class="tab-btn-step">
+                            <span>Step 2</span>
+                            <span class="tab-badge">GPS</span>
+                        </div>
+                        <div class="tab-btn-label">
+                            🚗 Live Mileage Drive
+                        </div>
+                        <div class="tab-progress" id="progress1"></div>
+                    </button>
+
+                    <button class="tab-btn" id="tab2" onclick="selectFlow(2)">
+                        <div class="tab-btn-step">
+                            <span>Step 3</span>
+                            <span class="tab-badge">Accounting</span>
+                        </div>
+                        <div class="tab-btn-label">
+                            📑 Pakka vs. Kachha
+                        </div>
+                        <div class="tab-progress" id="progress2"></div>
+                    </button>
+
+                    <button class="tab-btn" id="tab3" onclick="selectFlow(3)">
+                        <div class="tab-btn-step">
+                            <span>Step 4</span>
+                            <span class="tab-badge">Reports</span>
+                        </div>
+                        <div class="tab-btn-label">
+                            📊 CPA Tax Export
+                        </div>
+                        <div class="tab-progress" id="progress3"></div>
+                    </button>
+                </div>
+
+                <!-- 2-Column Layout: Phone Device + Explainer Deck -->
+                <div class="showcase-grid">
+
+                    <!-- LEFT: THE PHONE DEVICE MOCKUP -->
+                    <div class="device-container">
+                        <div class="phone-mockup">
+                            
+                            <!-- Dynamic Island -->
+                            <div class="phone-island">
+                                <div class="island-lens"></div>
+                                <div class="island-indicator"></div>
+                            </div>
+
+                            <!-- Screen Container -->
+                            <div class="phone-screen">
+
+                                <!-- Screen Status Bar -->
+                                <div class="screen-status-bar">
+                                    <span>9:41</span>
+                                    <div class="status-pill">
+                                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                        </svg>
+                                        100% OFFLINE
+                                    </div>
+                                    <span>100% 🔋</span>
+                                </div>
+
+                                <!-- Screen Deck of Slides -->
+                                <div class="screen-deck">
+
+                                    <!-- SLIDE 0: REALISTIC CAMERA OCR SCANNER -->
+                                    <div class="screen-slide active" id="slide0">
+                                        <div class="camera-scanner-wrapper">
+                                            <div class="camera-backdrop">
+                                                <!-- Realistic Physical Receipt Graphic -->
+                                                <div class="receipt-paper">
+                                                    <img src="assets/shell_receipt.png" alt="Thermal Receipt Scan" class="receipt-paper-img">
+
+                                                    <!-- Animated Laser Sweep -->
+                                                    <div class="laser-sweep"></div>
+
+                                                    <!-- Neural OCR Bounding Boxes -->
+                                                    <div class="scan-box box-merchant">
+                                                        <div class="scan-box-tag">MERCHANT: SHELL OIL</div>
+                                                    </div>
+
+                                                    <div class="scan-box box-date">
+                                                        <div class="scan-box-tag">DATE: NOV 20, 2026</div>
+                                                    </div>
+
+                                                    <div class="scan-box box-tax">
+                                                        <div class="scan-box-tag">TAX: $4.89</div>
+                                                    </div>
+
+                                                    <div class="scan-box box-total">
+                                                        <div class="scan-box-tag">TOTAL: $64.19</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Camera HUD Controls -->
+                                            <div class="cam-controls-bar">
+                                                <div style="font-size: 0.68rem; color: #94A3B8; font-weight: 700;">⚡ On-Device Neural C++</div>
+                                                <div class="cam-shutter-btn">
+                                                    <div class="cam-shutter-inner"></div>
+                                                </div>
+                                                <div style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">Locked 🎯</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SLIDE 1: REAL MILEAGE TRACKER SCREEN WITH LIVE DRIVE HUD -->
+                                    <div class="screen-slide" id="slide1">
+                                        <img src="assets/04_mileage_tracker.png" alt="Mileage Tracker App Screen" class="screen-img">
+                                        
+                                        <!-- Live Driving Stats Overlay -->
+                                        <div class="gps-overlay-card">
+                                            <div class="gps-overlay-top">
+                                                <div class="gps-live-badge">
+                                                    <div class="gps-pulse-dot"></div>
+                                                    <span>LIVE GPS DRIVE RECORDING</span>
+                                                </div>
+                                                <span style="font-size: 0.65rem; color: var(--emerald-light); font-weight: 800;">Accuracy 4.1m</span>
+                                            </div>
+                                            <div class="gps-stat-grid">
+                                                <div>
+                                                    <div class="gps-val-label">Distance (IRS $0.76/mi)</div>
+                                                    <div class="gps-val-number" id="gpsMilesTicker">28.5 mi</div>
+                                                </div>
+                                                <div style="text-align: right;">
+                                                    <div class="gps-val-label">Tax Deduction Earned</div>
+                                                    <div class="gps-val-number earned" id="gpsEarnedTicker">+$21.66</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SLIDE 2: REAL RECEIPTS SCREEN WITH PAKKA/KACHHA TOGGLE -->
+                                    <div class="screen-slide" id="slide2">
+                                        <img src="assets/02_receipt_scanner.png" alt="Itemized Receipts Screen" class="screen-img">
+
+                                        <!-- Interactive Filter Demo Pill Bar -->
+                                        <div class="pakka-filter-pill-bar">
+                                            <button class="pill-btn active-pakka" id="pillPakka">
+                                                ✓ Tax Bill (Pakka)
+                                            </button>
+                                            <button class="pill-btn inactive" id="pillKachha">
+                                                Cash Memo (Kachha)
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- SLIDE 3: REAL TAX REPORTS WITH CPA SCHEDULE C SHEET -->
+                                    <div class="screen-slide" id="slide3">
+                                        <img src="assets/05_tax_reports.png" alt="Tax Reports Screen" class="screen-img">
+
+                                        <!-- Animated CPA Schedule C Sheet -->
+                                        <div class="cpa-report-sheet">
+                                            <div class="sheet-header">
+                                                <div class="sheet-title">IRS FORM 1040 SCHEDULE C</div>
+                                                <div class="sheet-subtitle">Itemized Deductions Summary • Tax Year 2026</div>
+                                            </div>
+
+                                            <div class="sheet-line">
+                                                <span>Line 9: Car &amp; Truck (85.3 mi)</span>
+                                                <strong>$64.83</strong>
+                                            </div>
+                                            <div class="sheet-line">
+                                                <span>Line 20: Equipment &amp; Tools</span>
+                                                <strong>$139.04</strong>
+                                            </div>
+                                            <div class="sheet-line">
+                                                <span>Line 24b: Meals &amp; Dining (50%)</span>
+                                                <strong>$18.75</strong>
+                                            </div>
+                                            <div class="sheet-line">
+                                                <span>Line 22: Fuel &amp; Auto (Pakka)</span>
+                                                <strong>$64.19</strong>
+                                            </div>
+                                            <div class="sheet-line">
+                                                <span>Line 18: Office Expenses</span>
+                                                <strong>$48.50</strong>
+                                            </div>
+
+                                            <div class="sheet-total-row">
+                                                <span>TOTAL DEDUCTIBLE:</span>
+                                                <span class="amt">$335.31</span>
+                                            </div>
+
+                                            <div style="margin-top: 14px; font-size: 0.65rem; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px;">
+                                                📎 4 Scaled Thermal Receipt Photos Appended
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: SYNCHRONIZED EXPLAINER CARDS -->
+                    <div class="explainer-deck">
+
+                        <!-- Explainer 0 -->
+                        <div class="explainer-card active" id="explain0">
+                            <div class="explainer-top">
+                                <span class="explainer-tag emerald">Neural OCR Engine</span>
+                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Sub-250ms Speed</span>
+                            </div>
+                            <h3 class="explainer-title">1. Point, Snap &amp; Instant Data Extraction</h3>
+                            <p class="explainer-desc">
+                                Watch on-device Google ML Kit models process the physical thermal receipt right on your phone. It automatically isolates merchant name, purchase date, line-item totals, and sales tax with zero server round-trips.
+                            </p>
+                            <div class="explainer-bullets">
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Zero Network Lag:</strong> Recognition runs via native C++ binaries on your CPU/NPU.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Intelligent Fallback:</strong> Multi-pass regex extracts difficult totals even on faded gas slips.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Instant Verification:</strong> Edit or confirm fields in one tap before saving.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explainer 1 -->
+                        <div class="explainer-card" id="explain1" style="display: none;">
+                            <div class="explainer-top">
+                                <span class="explainer-tag">Dual-Mode Mileage</span>
+                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">IRS Standard: $0.76/mi</span>
+                            </div>
+                            <h3 class="explainer-title">2. Live GPS Breadcrumbs &amp; Statutory Rate Math</h3>
+                            <p class="explainer-desc">
+                                Start a business trip with one tap. High-accuracy foreground GPS logs your driving path, dynamically calculating accrued tax deductions in real-time. Prefer manual entry? Enter starting and ending odometer numbers in under 5 seconds.
+                            </p>
+                            <div class="explainer-bullets">
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Battery-Optimized Service:</strong> Uses Android Fused Location Provider with smart displacement filters.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Automatic Rate Calculation:</strong> Pre-configured with IRS ($0.76/mi), CRA ($0.70/km), and HMRC (45p/mi).</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Audit-Proof Log:</strong> Stores timestamps, route distance, and purpose for tax examiners.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explainer 2 -->
+                        <div class="explainer-card" id="explain2" style="display: none;">
+                            <div class="explainer-top">
+                                <span class="explainer-tag emerald">Audit-Proof Records</span>
+                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Clean Tax Separation</span>
+                            </div>
+                            <h3 class="explainer-title">3. Pakka vs. Kachha Dual Accounting</h3>
+                            <p class="explainer-desc">
+                                Eliminate audit panic. Small businesses and contractors often receive both official registered tax invoices (*Pakka*) and informal handwritten cash memos (*Kachha*). Receipt Scanner keeps them categorized under distinct ledgers.
+                            </p>
+                            <div class="explainer-bullets">
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>One-Tap Classification:</strong> Mark receipts as Pakka (formal) or Kachha (internal) during scan.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Separate Tax Exports:</strong> Provide your CPA with official tax bills while maintaining your private cash ledger.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Category Tagging:</strong> Auto-groups expenses by Fuel, Tools, Meals, Office Supplies, and Utilities.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explainer 3 -->
+                        <div class="explainer-card" id="explain3" style="display: none;">
+                            <div class="explainer-top">
+                                <span class="explainer-tag">CPA-Ready Exports</span>
+                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">PDF + CSV Spreadsheets</span>
+                            </div>
+                            <h3 class="explainer-title">4. Generate CPA PDF &amp; CSV Tax Reports</h3>
+                            <p class="explainer-desc">
+                                Tax season ready in 10 seconds. Generate an itemized PDF deduction report formatted specifically for IRS Form 1040 Schedule C, complete with receipt photo attachments and universal CSV spreadsheets compatible with Excel and QuickBooks.
+                            </p>
+                            <div class="explainer-bullets">
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>CPA-Approved Layout:</strong> Line-by-line categorization matching official tax forms.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Receipt Photo Appendix:</strong> Scaled thermal receipt images automatically embedded into the PDF.</div>
+                                </div>
+                                <div class="bullet-item">
+                                    <div class="bullet-icon">✓</div>
+                                    <div><strong>Universal CSV Export:</strong> Raw data export with date, merchant, category, mileage, and tax breakdown.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         BENTO GRID: CORE ARCHITECTURE & CAPABILITIES
+         ========================================================================= -->
+    <section class="section" id="features">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Deep-Dive Into Core Capabilities</h2>
+                <span class="section-tag">Engineered for Performance</span>
+                <h2 class="section-title">Built with Zero Compromises on Privacy</h2>
                 <p class="section-subtitle">
-                    Engineered from the ground up for zero friction, zero subscriptions, and complete offline security.
+                    Most expense apps monetize by selling your anonymized purchase habits. Receipt Scanner &amp; Mileage Log is 100% offline, keeping your private financial records strictly on your phone.
                 </p>
             </div>
 
             <div class="bento-grid">
-                <div class="bento-card featured">
-                    <div class="bento-icon emerald">🔒</div>
+
+                <!-- 1. Zero Cloud (Col Span 2) -->
+                <div class="bento-card col-span-2">
+                    <div class="bento-icon-box emerald">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
                     <h3>100% Zero-Cloud Storage Guarantee</h3>
                     <p>
-                        Unlike commercial cloud apps that store your financial receipts and location history on third-party remote servers, Receipt Scanner &amp; Mileage Log runs strictly inside Android's sandboxed local SQLite database in WAL mode. Your data is never uploaded, tracked, or brokered. Works seamlessly in Airplane Mode.
+                        Your receipts, tax numbers, and GPS driving logs live strictly inside Android's sandboxed local SQLite database in Write-Ahead Logging (WAL) mode. The app requires zero account creation, zero login credentials, and makes zero network calls to remote analytics or storage servers. Turn on Airplane Mode — the app works seamlessly with 100% functionality.
                     </p>
                 </div>
 
+                <!-- 2. On-Device ML Kit -->
                 <div class="bento-card">
-                    <div class="bento-icon">⚡</div>
+                    <div class="bento-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
                     <h3>On-Device Neural OCR</h3>
                     <p>
-                        High-accuracy text recognition directly using Google ML Kit on-device C++ models. Point, snap, and capture totals, vendor names, dates, and taxes in under 250ms with zero internet connection.
+                        Powered by Google ML Kit's embedded C++ neural text recognition engine. Point your camera at any receipt and extract totals, taxes, and vendor names in under 250 milliseconds without waiting for cloud processing.
                     </p>
                 </div>
 
+                <!-- 3. Dual-Mode Mileage -->
                 <div class="bento-card">
-                    <div class="bento-icon">🚗</div>
+                    <div class="bento-icon-box amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
                     <h3>Dual-Mode Mileage Tracker</h3>
                     <p>
-                        Record trips with live foreground GPS breadcrumbs or quickly input starting and ending odometer readings for manual or retroactive trip logging.
+                        Track drives either via automated foreground GPS breadcrumb logging or quick 5-second manual odometer entry. Automatically associates driving mileage with client projects and calculates tax write-offs in real time.
                     </p>
                 </div>
 
+                <!-- 4. 45+ Statutory Tax Rates -->
                 <div class="bento-card">
-                    <div class="bento-icon">🌐</div>
-                    <h3>Official Statutory Rates Pre-Configured</h3>
+                    <div class="bento-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <h3>45+ Statutory Tax Rates</h3>
                     <p>
-                        Pre-loaded with official statutory tax presets: US IRS (67¢/76¢/mi), Canada CRA (70¢/73¢/km), UK HMRC (45p/mi), Australia ATO (85c/91c/km), and India (₹14/km), plus custom rates.
+                        Pre-loaded with official statutory deduction mileage rates for the IRS ($0.76/mi), CRA ($0.70/km), HMRC (45p/mi), ATO, and custom vehicle reimbursement tiers.
                     </p>
                 </div>
 
+                <!-- 5. CPA Tax Exports -->
                 <div class="bento-card">
-                    <div class="bento-icon emerald">📊</div>
-                    <h3>CPA-Ready PDF &amp; CSV Exports</h3>
+                    <div class="bento-icon-box emerald">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3>Audit-Proof CPA Exports</h3>
                     <p>
-                        One-click export of beautifully formatted PDF deduction reports with receipt photo appendices, RFC-4180 CSV spreadsheets, and encrypted ZIP database backups.
+                        One-tap export creates clean, itemized Schedule C PDFs with embedded thermal receipt photos alongside universal CSV spreadsheets ready for tax preparers and accountants.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         HOW IT WORKS 3-STEP SECTION
+         ========================================================================= -->
+    <section class="section" id="how-it-works" style="background: rgba(14, 19, 31, 0.5);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Simple &amp; Efficient</span>
+                <h2 class="section-title">How It Works in 3 Quick Steps</h2>
+                <p class="section-subtitle">
+                    Designed to eliminate receipt clutter and spreadsheet headaches with zero friction.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Snap or Drive</h3>
+                    <p>
+                        Point your phone's camera at any printed receipt or tap "Start Drive" before you head out on a client visit or gig shift.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Auto-Extract &amp; Classify</h3>
+                    <p>
+                        On-device AI extracts totals and taxes in milliseconds. Tag as formal Tax Bill (*Pakka*) or informal cash slip (*Kachha*).
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>One-Tap Tax Filing</h3>
+                    <p>
+                        When tax season arrives, export a comprehensive CPA-ready deduction report in PDF or CSV format directly to your accountant.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================================================
-         FAQ ACCORDION
-         ========================================================================== -->
-    <section class="faq-section" id="faqs">
+    <!-- =========================================================================
+         FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION)
+         ========================================================================= -->
+    <section class="section" id="faqs">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Frequently Asked Questions</h2>
+                <span class="section-tag">Frequently Asked Questions</span>
+                <h2 class="section-title">Everything You Need to Know</h2>
                 <p class="section-subtitle">
-                    Everything you need to know about privacy, tax deductions, and offline performance.
+                    Common questions regarding privacy, IRS compliance, OCR accuracy, and offline capabilities.
                 </p>
             </div>
 
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>Does this app require an internet connection or account?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+            <div class="faq-wrapper">
+
+                <div class="faq-item active">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is my financial and location data truly private?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>No. The app is engineered strictly as a 100% offline, zero-server utility. You never have to sign up, log in, or give your email. It runs completely in Airplane Mode.</p>
+                        Yes, 100%. Receipt Scanner &amp; Mileage Log is engineered with a strict Zero-Cloud architecture. All receipt scans, merchant names, amounts, tax calculations, and GPS coordinates live entirely inside your phone's local SQLite database. The app contains zero tracking SDKs, zero ads, and never uploads your personal data to any external server.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>How does on-device receipt OCR protect my financial privacy?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Does the app work in Airplane Mode or with no internet?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>Cloud scanner apps upload your private receipts to remote servers. Our app processes receipt images entirely on your phone’s local CPU/GPU using Google ML Kit. Your numbers never leave your device.</p>
+                        Yes! Both the OCR camera text scanner and the mileage log work completely offline. Google ML Kit's neural models run on your phone's local hardware without requiring an internet connection. You can scan receipts and track drives in remote areas with zero cell signal.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>What is the difference between "Pakka (Tax Bill)" and "Kachha (Cash Memo)"?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Are the exported PDF reports accepted by CPAs and the IRS?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>Pakka refers to formal tax invoices with official tax registration numbers (GST/HST/VAT), while Kachha refers to informal cash slips or petty cash vouchers. The app keeps them cleanly separated to prevent tax audit issues.</p>
+                        Yes. The exported reports follow standard IRS Form 1040 Schedule C and Form 2106 itemization requirements. The generated PDF includes line-by-line itemization (date, merchant, business purpose, mileage rate, tax paid) and automatically embeds scaled photos of your original receipts as a verifiable audit appendix.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>How do I send my tax report to my CPA or accountant?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is the difference between Pakka and Kachha records?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>In the Reports tab, tap Export Tax PDF for a formatted audit report with receipt photos attached, or tap Export CSV for a clean spreadsheet compatible with Excel, Google Sheets, or QuickBooks.</p>
+                        *Pakka* records represent formal, registered tax invoices with official tax identification numbers (e.g. GST, VAT, Sales Tax) suitable for tax write-offs. *Kachha* records represent informal cash memos or daily pocket cash expenses. By separating them into distinct categories, you maintain clean audit-proof books for your tax accountant while still tracking total business cash outflows.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>Can I log mileage retroactively if I forgot to start GPS tracking?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How accurate is the OCR text scanner on faded receipts?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>Yes! Use the Odometer Trip feature to enter your vehicle’s start and end odometer numbers (or exact distance traveled). The app calculates the deduction automatically.</p>
+                        The app uses Google's latest on-device machine learning vision models combined with localized contrast enhancement algorithms. Even if a thermal receipt is crinkled or slightly faded, the multi-pass parser intelligently cross-references subtotal, tax, and total values. You can also manually adjust or verify any field before saving.
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <span>Are there any subscription paywalls or hidden in-app purchases?</span>
-                        <span class="faq-chevron">▼</span>
-                    </div>
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Does live GPS mileage tracking drain battery?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
                     <div class="faq-answer">
-                        <p>No. All core features—unlimited receipt scanning, unlimited GPS mileage tracking, PDF generation, CSV exports, and full offline backups—are 100% free with zero paywalls.</p>
+                        The app uses Android's Fused Location Provider with adaptive displacement filters, requesting location updates only when meaningful movement occurs. When your vehicle stops at traffic lights, GPS polling dynamically throttles down to conserve battery.
                     </div>
                 </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How can I backup or transfer my receipt data?</span>
+                        <div class="faq-icon">+</div>
+                    </button>
+                    <div class="faq-answer">
+                        Because the app is 100% offline, you retain total ownership of your files. You can export your entire database anytime as a universal CSV spreadsheet or a complete PDF report and save it to your Google Drive, USB drive, or email it to your personal computer.
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -1551,265 +1944,170 @@
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="footer-brand">
+                <img src="assets/play_store_icon_512.png" alt="App Icon" style="width: 32px; height: 32px; border-radius: 8px;">
+                <strong style="color: var(--text-primary); font-size: 1rem;">Receipt Scanner &amp; Mileage Log</strong>
+            </div>
+
             <div class="footer-links">
-                <a href="#interactive-simulator" class="footer-link">Live Simulated Demo</a>
-                <a href="#features" class="footer-link">Features</a>
+                <a href="#interactive-demo" class="footer-link">Live Simulated Demo</a>
+                <a href="#features" class="footer-link">Core Features</a>
+                <a href="#how-it-works" class="footer-link">How It Works</a>
                 <a href="#faqs" class="footer-link">FAQs</a>
                 <a href="https://ayckerayush.github.io/receiptlog-privacy/" class="footer-link" target="_blank">Privacy Policy</a>
-                <a href="https://github.com/AyckerAyush/receipt-scanner-mileage-log" class="footer-link" target="_blank">GitHub Repository</a>
-                <a href="mailto:ayckerinnovation@gmail.com" class="footer-link">Contact Developer</a>
+                <a href="mailto:ayckerinnovation@gmail.com" class="footer-link">Support &amp; Feedback</a>
             </div>
-            <p>&copy; 2026 Aycker (Ayush). All rights reserved.</p>
+
+            <p class="footer-copy">&copy; 2026 Aycker (Ayush). All rights reserved. Package: <code>com.aycker.receiptlog</code></p>
         </div>
     </footer>
 
-    <!-- ==========================================================================
-         SIMULATOR ANIMATION ENGINE JAVASCRIPT
-         ========================================================================== -->
+    <!-- =========================================================================
+         SIMULATOR CONTROLLER JAVASCRIPT
+         ========================================================================= -->
     <script>
-        const finger = document.getElementById('virtualFinger');
-        const ripple = document.getElementById('touchRipple');
-        const views = {
-            dashboard: document.getElementById('viewDashboard'),
-            camera: document.getElementById('viewCamera'),
-            gps: document.getElementById('viewGps'),
-            reports: document.getElementById('viewReports')
-        };
-
         let currentFlow = 0;
         let isTourPlaying = true;
-        let flowTimer = null;
+        let tourInterval = null;
+        let progressInterval = null;
+        let progressVal = 0;
+        const DURATION = 6500; // 6.5s per flow
 
-        function showView(name) {
-            Object.values(views).forEach(v => v.classList.remove('active'));
-            if (views[name]) views[name].classList.add('active');
-        }
-
-        function triggerTouch(x, y, callback) {
-            finger.style.opacity = '1';
-            finger.style.left = x + 'px';
-            finger.style.top = y + 'px';
-
-            setTimeout(() => {
-                finger.classList.add('tap');
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.classList.add('active');
-
-                setTimeout(() => {
-                    finger.classList.remove('tap');
-                    ripple.classList.remove('active');
-                    if (callback) callback();
-                }, 300);
-            }, 500);
-        }
-
-        function hideFinger() {
-            finger.style.opacity = '0';
-        }
-
-        /* -------------------------------------------------------------
-           FLOW 1: RECEIPT SCANNING SIMULATION
-           ------------------------------------------------------------- */
-        function playFlow0() {
-            setActiveScenarioCard(0);
-            showView('dashboard');
-            hideFinger();
-
-            // Step 1: Touch "Scan Receipt" button
-            setTimeout(() => {
-                triggerTouch(80, 240, () => {
-                    showView('camera');
-                    hideFinger();
-
-                    // Step 2: Laser sweeps and AI detects receipt boxes
-                    setTimeout(() => {
-                        document.getElementById('boxMerchant').style.opacity = '1';
-                        document.getElementById('boxMerchant').style.transform = 'scale(1)';
-                    }, 800);
-                    setTimeout(() => {
-                        document.getElementById('boxDate').style.opacity = '1';
-                        document.getElementById('boxDate').style.transform = 'scale(1)';
-                    }, 1400);
-                    setTimeout(() => {
-                        document.getElementById('boxTotal').style.opacity = '1';
-                        document.getElementById('boxTotal').style.transform = 'scale(1)';
-                    }, 2000);
-                    setTimeout(() => {
-                        document.getElementById('boxTax').style.opacity = '1';
-                        document.getElementById('boxTax').style.transform = 'scale(1)';
-                    }, 2500);
-
-                    // Step 3: Touch shutter to save
-                    setTimeout(() => {
-                        triggerTouch(160, 560, () => {
-                            showView('dashboard');
-                            hideFinger();
-
-                            // Animate dashboard addition
-                            const newCard = document.getElementById('newlyAddedCard');
-                            newCard.style.display = 'flex';
-                            document.getElementById('dashTotal').textContent = '$399.50';
-                            document.getElementById('dashTotal').style.color = 'var(--emerald-bright)';
-                            document.getElementById('dashReceipts').textContent = '$334.67';
-
-                            setTimeout(() => {
-                                document.getElementById('dashTotal').style.color = '#ffffff';
-                            }, 1500);
-                        });
-                    }, 3200);
-                });
-            }, 600);
-        }
-
-        /* -------------------------------------------------------------
-           FLOW 2: LIVE GPS MILEAGE DRIVE SIMULATION
-           ------------------------------------------------------------- */
-        function playFlow1() {
-            setActiveScenarioCard(1);
-            showView('dashboard');
-            hideFinger();
-
-            // Touch "Log Mileage" button
-            setTimeout(() => {
-                triggerTouch(240, 240, () => {
-                    showView('gps');
-                    hideFinger();
-
-                    // Animate car driving along route and distance ticking
-                    let dist = 0.0;
-                    const milesEl = document.getElementById('gpsMiles');
-                    const earnedEl = document.getElementById('gpsEarned');
-                    const car = document.getElementById('simCar');
-
-                    const driveInterval = setInterval(() => {
-                        dist += 2.8;
-                        if (dist >= 28.5) {
-                            dist = 28.5;
-                            clearInterval(driveInterval);
-                        }
-                        milesEl.textContent = dist.toFixed(1) + ' mi';
-                        const earned = (dist * 0.76).toFixed(2);
-                        earnedEl.textContent = '+$' + earned;
-
-                        const pct = dist / 28.5;
-                        car.style.left = (30 + pct * 210) + 'px';
-                        car.style.top = (160 - Math.sin(pct * Math.PI) * 90) + 'px';
-                    }, 200);
-
-                    // Finish Trip
-                    setTimeout(() => {
-                        triggerTouch(160, 540, () => {
-                            showView('dashboard');
-                            hideFinger();
-                            document.getElementById('dashMileage').textContent = '$86.49';
-                            document.getElementById('dashTotal').textContent = '$356.97';
-                        });
-                    }, 3200);
-                });
-            }, 600);
-        }
-
-        /* -------------------------------------------------------------
-           FLOW 3: DUAL ACCOUNTING PAKKA / KACHHA
-           ------------------------------------------------------------- */
-        function playFlow2() {
-            setActiveScenarioCard(2);
-            showView('dashboard');
-            hideFinger();
-
-            // Highlight recent entries
-            setTimeout(() => {
-                triggerTouch(160, 360, () => {
-                    hideFinger();
-                });
-            }, 600);
-        }
-
-        /* -------------------------------------------------------------
-           FLOW 4: CPA TAX REPORTS EXPORT
-           ------------------------------------------------------------- */
-        function playFlow3() {
-            setActiveScenarioCard(3);
-            showView('reports');
-            hideFinger();
-
-            const pdf = document.getElementById('pdfSheet');
-            pdf.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                pdf.style.transform = 'scale(1.02)';
-                setTimeout(() => { pdf.style.transform = 'scale(1)'; }, 200);
-            }, 400);
-
-            setTimeout(() => {
-                triggerTouch(80, 520, () => {
-                    hideFinger();
-                });
-            }, 1200);
-        }
-
-        function runFlow(index) {
+        function selectFlow(index) {
             currentFlow = index;
-            clearTimeout(flowTimer);
+            resetProgress();
+            updateShowcaseUI(index);
+        }
 
-            if (index === 0) playFlow0();
-            else if (index === 1) playFlow1();
-            else if (index === 2) playFlow2();
-            else if (index === 3) playFlow3();
+        function updateShowcaseUI(index) {
+            // Update Tab states
+            for (let i = 0; i < 4; i++) {
+                const tab = document.getElementById('tab' + i);
+                const slide = document.getElementById('slide' + i);
+                const explain = document.getElementById('explain' + i);
+                const progress = document.getElementById('progress' + i);
 
-            if (isTourPlaying) {
-                flowTimer = setTimeout(() => {
-                    const next = (currentFlow + 1) % 4;
-                    runFlow(next);
-                }, 6500);
+                if (i === index) {
+                    tab.classList.add('active');
+                    slide.classList.add('active');
+                    explain.style.display = 'block';
+                    explain.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                    slide.classList.remove('active');
+                    explain.style.display = 'none';
+                    explain.classList.remove('active');
+                    progress.style.width = '0%';
+                }
+            }
+
+            // Slide-specific dynamic micro-animations
+            if (index === 1) {
+                // Animate GPS mileage counter
+                animateMileageCounter();
+            } else if (index === 2) {
+                // Animate Pakka / Kachha toggle
+                animatePakkaToggle();
             }
         }
 
-        function setActiveScenarioCard(index) {
-            document.querySelectorAll('.scenario-card').forEach((card, idx) => {
-                if (idx === index) card.classList.add('active');
-                else card.classList.remove('active');
-            });
+        function animateMileageCounter() {
+            const milesEl = document.getElementById('gpsMilesTicker');
+            const earnedEl = document.getElementById('gpsEarnedTicker');
+            let m = 0.0;
+            const step = () => {
+                m += 1.9;
+                if (m > 28.5) m = 28.5;
+                milesEl.textContent = m.toFixed(1) + ' mi';
+                earnedEl.textContent = '+$' + (m * 0.76).toFixed(2);
+                if (m < 28.5 && currentFlow === 1) {
+                    setTimeout(step, 80);
+                }
+            };
+            step();
+        }
+
+        function animatePakkaToggle() {
+            const pillP = document.getElementById('pillPakka');
+            const pillK = document.getElementById('pillKachha');
+            setTimeout(() => {
+                if (currentFlow !== 2) return;
+                pillP.className = 'pill-btn inactive';
+                pillK.className = 'pill-btn active-pakka';
+                setTimeout(() => {
+                    if (currentFlow !== 2) return;
+                    pillK.className = 'pill-btn inactive';
+                    pillP.className = 'pill-btn active-pakka';
+                }, 1800);
+            }, 1200);
+        }
+
+        function resetProgress() {
+            clearInterval(progressInterval);
+            progressVal = 0;
+            for (let i = 0; i < 4; i++) {
+                document.getElementById('progress' + i).style.width = '0%';
+            }
+            if (isTourPlaying) {
+                startProgressBar();
+            }
+        }
+
+        function startProgressBar() {
+            const stepMs = 50;
+            const inc = (stepMs / DURATION) * 100;
+            progressInterval = setInterval(() => {
+                progressVal += inc;
+                if (progressVal > 100) progressVal = 100;
+                const activeProgress = document.getElementById('progress' + currentFlow);
+                if (activeProgress) {
+                    activeProgress.style.width = progressVal + '%';
+                }
+
+                if (progressVal >= 100) {
+                    clearInterval(progressInterval);
+                    const next = (currentFlow + 1) % 4;
+                    selectFlow(next);
+                }
+            }, stepMs);
         }
 
         function toggleTour() {
             isTourPlaying = !isTourPlaying;
-            const btn = document.getElementById('tourBtn');
+            const label = document.getElementById('tourLabel');
+            const btn = document.getElementById('btnToggleTour');
+            const icon = document.getElementById('tourIcon');
+
             if (isTourPlaying) {
-                btn.textContent = 'Auto-Tour: Playing ⏸';
-                btn.style.background = 'rgba(59, 130, 246, 0.2)';
-                runFlow(currentFlow);
+                btn.classList.add('active');
+                label.textContent = 'Auto-Tour: Playing';
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+                resetProgress();
             } else {
-                btn.textContent = 'Auto-Tour: Paused ▶';
-                btn.style.background = 'rgba(255, 255, 255, 0.1)';
-                clearTimeout(flowTimer);
-                hideFinger();
+                btn.classList.remove('active');
+                label.textContent = 'Auto-Tour: Paused';
+                icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+                clearInterval(progressInterval);
+                document.getElementById('progress' + currentFlow).style.width = '0%';
             }
         }
 
-        function toggleFaq(el) {
-            const item = el.parentElement;
-            const answer = item.querySelector('.faq-answer');
-            const isOpen = item.classList.contains('open');
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('active'));
 
-            document.querySelectorAll('.faq-item').forEach(other => {
-                if (other !== item) {
-                    other.classList.remove('open');
-                    other.querySelector('.faq-answer').style.maxHeight = null;
-                }
-            });
-
-            if (isOpen) {
-                item.classList.remove('open');
-                answer.style.maxHeight = null;
-            } else {
-                item.classList.add('open');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
+            // Toggle selected
+            if (!isActive) {
+                item.classList.add('active');
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            runFlow(0);
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            selectFlow(0);
         });
     </script>
 </body>
