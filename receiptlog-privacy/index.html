@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Scanner & Mileage Log - Privacy Policy & Legal Disclaimers</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-color: #38bdf8;
+            --accent-green: #34d399;
+            --accent-amber: #fbbf24;
+            --border-color: #334155;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --danger-border: #ef4444;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        h2 {
+            color: var(--accent-green);
+            margin-top: 24px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #f8fafc;
+            margin-top: 18px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+        }
+        ul {
+            padding-left: 22px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(52, 211, 153, 0.15);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            border-radius: 9999px;
+            padding: 5px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        .liability-card {
+            background-color: var(--card-bg);
+            border: 1.5px solid var(--accent-amber);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 24px;
+        }
+        .liability-card h2 {
+            color: var(--accent-amber);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        .caps-clause {
+            background-color: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid var(--accent-amber);
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="badge">100% OFFLINE &bull; ZERO SERVER &bull; LOCAL ON-DEVICE STORAGE</span>
+            <h1>Privacy Policy & Legal Disclaimers</h1>
+            <p><strong>Receipt Scanner & Mileage Log</strong> (Package: <code>com.aycker.receiptlog</code>)</p>
+            <p>Effective Date: November 21, 2026 &bull; Last Updated: November 21, 2026</p>
+        </header>
+
+        <!-- Section 1: Core Privacy Guarantee -->
+        <section class="card">
+            <h2>1. Absolute On-Device Privacy & Zero Server Architecture</h2>
+            <p><strong>Receipt Scanner & Mileage Log</strong> is engineered strictly as a 100% offline, zero-server personal expense utility. We believe your sensitive financial receipts, tax deductions, and GPS location history should remain strictly yours.</p>
+            <ul>
+                <li><strong>No User Accounts or Passwords:</strong> You do not need to register, log in, or provide an email address, phone number, or identity details to use this application.</li>
+                <li><strong>Zero Cloud Uploads:</strong> Scanned receipts, vendor names, line items, monetary values, and trip routes are processed and stored <strong>100% locally on your smartphone</strong> via local SQLite database and internal app sandbox storage.</li>
+                <li><strong>Zero Telemetry on Financials:</strong> The developer does NOT own, operate, or maintain any server that receives, aggregates, or monitors your financial data.</li>
+            </ul>
+        </section>
+
+        <!-- Section 2: Device Permissions -->
+        <section class="card">
+            <h2>2. Device Permissions & Scoped Access</h2>
+            <p>The application complies with modern Android Zero-Permission and Scoped Access requirements. It does <strong>not</strong> declare or request broad storage access permissions (such as <code>READ_EXTERNAL_STORAGE</code>, <code>WRITE_EXTERNAL_STORAGE</code>, or <code>MANAGE_EXTERNAL_STORAGE</code>):</p>
+            <ul>
+                <li><strong>Camera & Photo Picker:</strong> Used exclusively when you choose to take a photo of a physical receipt or pick an existing receipt image using Android's system Photo Picker. Receipt OCR (Optical Character Recognition) runs completely on your device using on-device Google ML Kit models.</li>
+                <li><strong>Foreground Location (ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION):</strong> Used strictly while you actively record a live business trip to calculate cumulative travel distance and compute mileage deductions. We do <strong>NOT</strong> declare, request, or use background location tracking (<code>ACCESS_BACKGROUND_LOCATION</code>). Location sampling stops immediately when you end or pause the trip.</li>
+                <li><strong>Document Picker:</strong> Used only when you explicitly export a tax PDF/CSV report or choose to restore a local encrypted backup ZIP file.</li>
+            </ul>
+        </section>
+
+        <!-- Section 3: Third-Party Services -->
+        <section class="card">
+            <h2>3. Third-Party Services & Monetization</h2>
+            <p>To support ongoing maintenance while keeping the application free, the app integrates certified Google Play developer SDKs:</p>
+            
+            <h3>Google AdMob</h3>
+            <p>Used to deliver non-intrusive adaptive banners and frequency-capped export interstitial ads for free users. Google AdMob may automatically collect pseudonymous device diagnostic identifiers (such as Android Advertising ID) and crash metrics in accordance with <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>. Personalized ads can be opted out at any time in your device's Android System Settings.</p>
+
+            <h3>Google Play In-App Billing</h3>
+            <p>Used to process the optional Lifetime Pro upgrade. All payment transactions are securely handled directly by Google Play. The developer never receives, sees, or stores your credit card, debit card, UPI, bank account, or payment credentials.</p>
+        </section>
+
+        <!-- Section 4: Ironclad Financial & Tax Disclaimer (Liability Protection) -->
+        <section class="liability-card">
+            <h2>4. Essential Tax, Legal & Financial Advice Disclaimer</h2>
+            <p><strong>PLEASE READ THIS SECTION CAREFULLY. IT GOVERNS YOUR USE OF THIS APPLICATION.</strong></p>
+            
+            <p><strong>Receipt Scanner & Mileage Log</strong> is an independent calculation, record-keeping, and document formatting utility intended solely for convenience and organizational purposes.</p>
+
+            <ul>
+                <li><strong>NOT Certified Financial or Tax Advice:</strong> The software, calculations, standard mileage rates (IRS, CRA, ATO, etc.), tax categories, and generated PDF/CSV reports do <strong>NOT</strong> constitute professional tax, accounting, financial, or legal advice.</li>
+                <li><strong>No Fiduciary or Advisory Relationship:</strong> No Certified Public Accountant (CPA), tax preparer, enrolled agent, or attorney-client relationship is formed between you and the developer (Aycker / Ayush).</li>
+                <li><strong>Independent Rate Verification:</strong> Government tax agencies, standard mileage deduction rates, local sales tax (GST/HST/VAT), and eligible business deduction categories change periodically. You are solely responsible for independently verifying current deduction allowances with your local tax authority or a certified tax professional.</li>
+                <li><strong>Audit & Proof Retention:</strong> Tax authorities frequently require original proof of purchase or formal itemized documentation. You are solely responsible for retaining necessary records and evaluating whether digital photos or cash memos comply with your specific jurisdiction's audit standards.</li>
+            </ul>
+        </section>
+
+        <!-- Section 5: Limitation of Liability -->
+        <section class="liability-card">
+            <h2>5. Disclaimer of Warranties & Limitation of Liability</h2>
+            <div class="caps-clause">
+                <strong>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW:</strong><br><br>
+                THE APPLICATION IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY OF OCR OR GPS CALCULATIONS, OR NON-INFRINGEMENT.<br><br>
+                UNDER NO CIRCUMSTANCES SHALL THE DEVELOPER (AYCKER / AYUSH), ITS AFFILIATES, OR LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION DAMAGES FOR LOSS OF PROFITS, TAX PENALTIES, AUDIT ASSESSMENTS, INTEREST, GOVERNMENT FINES, DISALLOWED DEDUCTIONS, DATA LOSS, DEVICE DAMAGE, OR BUSINESS INTERRUPTION, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OR INABILITY TO USE THIS APPLICATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+            </div>
+            <p>Your sole and exclusive remedy for dissatisfaction with the application or any error in calculations is to discontinue using the software.</p>
+        </section>
+
+        <!-- Section 6: User Data Rights & Erasure -->
+        <section class="card">
+            <h2>6. Data Ownership, Retention & Erasure</h2>
+            <p>Because all data resides exclusively on your local device:</p>
+            <ul>
+                <li>You have complete authority to edit, update, or permanently delete any receipt, trip, or note at any time.</li>
+                <li>Uninstalling the application or clearing the application's storage in Android Settings instantly and permanently purges all local databases and saved receipt images from your device.</li>
+                <li>You can create an encrypted local ZIP backup or export CSV spreadsheets at any time to preserve your own offline archives.</li>
+            </ul>
+        </section>
+
+        <!-- Section 7: Children's Privacy -->
+        <section class="card">
+            <h2>7. Children's Privacy</h2>
+            <p>The application is designed for self-employed individuals, gig workers, and adults (aged 18 and older). We do not knowingly collect personal information from children under the age of 13.</p>
+        </section>
+
+        <!-- Section 8: Developer Contact -->
+        <section class="card">
+            <h2>8. Developer Contact Information</h2>
+            <p>If you have any questions, feedback, or legal inquiries regarding this Privacy Policy or the application, please contact:</p>
+            <p>
+                <strong>Developer:</strong> Aycker (Ayush)<br>
+                <strong>Email:</strong> <a href="mailto:ayckerinnovation@gmail.com">ayckerinnovation@gmail.com</a><br>
+                <strong>Portfolio & Projects:</strong> <a href="https://ayckerayush.github.io" target="_blank" rel="noopener">https://ayckerayush.github.io</a>
+            </p>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2026 Aycker (Ayush). All rights reserved.</p>
+            <p><a href="https://ayckerayush.github.io">Developer Home</a> &bull; <a href="https://github.com/AyckerAyush/receipt-scanner-mileage-log">Source Repository</a></p>
+        </footer>
+    </div>
+</body>
+</html>
