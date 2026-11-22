@@ -2,30 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Receipt Scanner &amp; Mileage Log — 100% Offline Tax Deduction App</title>
-    <meta name="description" content="Interactive demo and complete feature guide for Receipt Scanner & Mileage Log. 100% offline, on-device neural OCR, dual-mode GPS mileage tracking, and CPA-ready tax reports.">
+    <meta name="description" content="Official interactive demo and walkthrough for Receipt Scanner & Mileage Log. 100% offline, on-device neural OCR, live GPS mileage tracking, and audit-ready CPA tax reports.">
     <link rel="icon" type="image/png" href="assets/play_store_icon_512.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-canvas: #07090E;
-            --bg-surface: #0E131F;
-            --bg-card: #141B2D;
-            --bg-card-hover: #1A243B;
+            --bg-canvas: #06080D;
+            --bg-surface: #0B101C;
+            --bg-card: #12192B;
+            --bg-card-hover: #18223B;
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-highlight: rgba(59, 130, 246, 0.3);
+            --border-focus: rgba(59, 130, 246, 0.4);
             
             --emerald: #10B981;
-            --emerald-glow: rgba(16, 185, 129, 0.25);
+            --emerald-glow: rgba(16, 185, 129, 0.3);
             --emerald-light: #34D399;
             --blue: #3B82F6;
-            --blue-glow: rgba(59, 130, 246, 0.25);
+            --blue-glow: rgba(59, 130, 246, 0.3);
             --blue-light: #60A5FA;
             --indigo: #6366F1;
             --amber: #F59E0B;
@@ -44,8 +44,8 @@
             --font-mono: 'JetBrains Mono', monospace;
             
             --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-            --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
-            --shadow-glow: 0 0 30px -5px rgba(59, 130, 246, 0.2);
+            --shadow-elevated: 0 20px 45px -12px rgba(0, 0, 0, 0.8);
+            --shadow-glow: 0 0 35px -5px rgba(59, 130, 246, 0.2);
         }
 
         *, *::before, *::after {
@@ -68,7 +68,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient Glow Background */
+        /* Ambient Lighting */
         .ambient-glow {
             position: fixed;
             top: 0;
@@ -84,11 +84,11 @@
         .ambient-glow::before {
             content: '';
             position: absolute;
-            top: -200px;
-            left: 20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -150px;
+            left: 15%;
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.14) 0%, transparent 70%);
             border-radius: 50%;
             filter: blur(80px);
         }
@@ -96,33 +96,36 @@
         .ambient-glow::after {
             content: '';
             position: absolute;
-            top: 300px;
-            right: 15%;
-            width: 500px;
-            height: 500px;
+            top: 350px;
+            right: 10%;
+            width: 550px;
+            height: 550px;
             background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
             border-radius: 50%;
             filter: blur(90px);
         }
 
         .container {
-            max-width: 1240px;
+            max-width: 1220px;
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
             z-index: 1;
         }
 
-        /* Navigation Bar */
+        /* =====================================================================
+           STICKY NAVBAR (COMPACT & ROBUST)
+           ===================================================================== */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            background: rgba(7, 9, 14, 0.85);
+            background: rgba(6, 8, 13, 0.9);
             border-bottom: 1px solid var(--border-subtle);
-            padding: 16px 0;
+            padding: 12px 0;
+            transition: all 0.2s ease;
         }
 
         .nav-inner {
@@ -140,23 +143,24 @@
         }
 
         .brand-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            flex-shrink: 0;
         }
 
         .brand-title {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             font-weight: 800;
             letter-spacing: -0.02em;
             line-height: 1.2;
         }
 
         .brand-pill {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--emerald-light);
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -165,13 +169,13 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 26px;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             font-weight: 600;
             transition: color 0.2s ease;
         }
@@ -183,9 +187,9 @@
         .nav-btn {
             background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
             color: #ffffff;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: var(--radius-full);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-decoration: none;
             display: inline-flex;
@@ -200,9 +204,11 @@
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
         }
 
-        /* Hero Section */
+        /* =====================================================================
+           HERO SECTION
+           ===================================================================== */
         .hero {
-            padding: 64px 0 40px;
+            padding: 48px 0 32px;
             text-align: center;
         }
 
@@ -215,19 +221,19 @@
             padding: 6px 16px;
             border-radius: var(--radius-full);
             color: var(--blue-light);
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.02em;
             margin-bottom: 20px;
         }
 
         .hero-title {
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-size: clamp(2rem, 4.5vw, 3.6rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             line-height: 1.15;
-            max-width: 960px;
-            margin: 0 auto 20px;
+            max-width: 940px;
+            margin: 0 auto 18px;
         }
 
         .hero-title span.gradient-emerald {
@@ -236,17 +242,11 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-title span.gradient-blue {
-            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         .hero-subtitle {
-            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
             color: var(--text-secondary);
-            max-width: 740px;
-            margin: 0 auto 32px;
+            max-width: 720px;
+            margin: 0 auto 28px;
             line-height: 1.6;
         }
 
@@ -254,16 +254,16 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 48px;
+            gap: 10px;
+            margin-bottom: 36px;
         }
 
         .highlight-chip {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-subtle);
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: var(--radius-full);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: var(--text-secondary);
             display: flex;
@@ -273,23 +273,23 @@
 
         .highlight-chip svg {
             color: var(--emerald);
+            flex-shrink: 0;
         }
 
         /* =====================================================================
-           INTERACTIVE DEMO SHOWCASE SECTION
+           CORE INTERACTIVE SHOWCASE SECTION
            ===================================================================== */
         .showcase-section {
-            padding: 20px 0 80px;
+            padding: 10px 0 70px;
         }
 
         .showcase-wrapper {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-xl);
-            padding: 40px;
+            padding: 36px;
             box-shadow: var(--shadow-elevated), var(--shadow-glow);
             position: relative;
-            overflow: hidden;
         }
 
         .showcase-header {
@@ -297,37 +297,37 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 36px;
-            padding-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-subtle);
         }
 
         .showcase-title-area h2 {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .showcase-title-area p {
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
         .tour-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .tour-btn {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            padding: 10px 18px;
+            padding: 9px 16px;
             border-radius: var(--radius-full);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -347,24 +347,27 @@
             color: var(--emerald-light);
         }
 
-        /* Mode Selection Tabs */
+        /* 4 Step Tabs */
         .showcase-tabs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-bottom: 36px;
+            margin-bottom: 32px;
         }
 
         .tab-btn {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 14px 18px;
+            padding: 12px 16px;
             text-align: left;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .tab-btn:hover {
@@ -375,85 +378,97 @@
         .tab-btn.active {
             background: rgba(59, 130, 246, 0.1);
             border-color: var(--blue);
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
+            box-shadow: 0 4px 18px rgba(59, 130, 246, 0.25);
         }
 
-        .tab-btn-step {
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
+        .tab-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
         }
 
-        .tab-btn.active .tab-btn-step {
+        .tab-btn.active .tab-header-row {
             color: var(--blue-light);
         }
 
-        .tab-btn-label {
-            font-size: 0.95rem;
+        .tab-badge {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 700;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .tab-progress {
+        .tab-btn.active .tab-badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blue-light);
+        }
+
+        .tab-title-text {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab-progress-bar {
             position: absolute;
             bottom: 0;
             left: 0;
             height: 3px;
             background: var(--blue);
             width: 0%;
-            transition: width 0.1s linear;
+            transition: width 0.05s linear;
         }
 
-        /* Showcase Main Grid: Phone + Detailed Explainer */
+        /* Grid: Phone Frame (Left) + Explainer Deck (Right) */
         .showcase-grid {
             display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 48px;
+            grid-template-columns: 360px 1fr;
+            gap: 40px;
             align-items: center;
         }
 
         /* =====================================================================
-           ULTRA-REALISTIC SMARTPHONE MOCKUP FRAME
+           FLAGSHIP SMARTPHONE MOCKUP FRAME
            ===================================================================== */
         .device-container {
             display: flex;
             justify-content: center;
+            width: 100%;
         }
 
         .phone-mockup {
-            width: 360px;
-            height: 730px;
+            width: 350px;
+            height: 710px;
             background: #000000;
-            border-radius: 50px;
-            padding: 12px;
+            border-radius: 48px;
+            padding: 10px;
             box-shadow: 
-                0 0 0 3px #2A3245,
-                0 0 0 6px #121622,
+                0 0 0 3px #262D3D,
+                0 0 0 5px #111520,
                 0 25px 60px -15px rgba(0, 0, 0, 0.9),
-                0 0 50px rgba(59, 130, 246, 0.15);
+                0 0 45px rgba(59, 130, 246, 0.15);
             position: relative;
             user-select: none;
         }
 
-        /* Reflection Gloss on Screen */
         .phone-mockup::before {
             content: '';
             position: absolute;
-            top: 14px;
+            top: 12px;
             left: 20px;
             right: 40px;
-            height: 120px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-            border-radius: 40px 40px 0 0;
+            height: 110px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 60%);
+            border-radius: 38px 38px 0 0;
             pointer-events: none;
             z-index: 30;
         }
@@ -461,53 +476,54 @@
         .phone-screen {
             width: 100%;
             height: 100%;
-            background: #0B101D;
-            border-radius: 40px;
+            background: #080C16;
+            border-radius: 38px;
             overflow: hidden;
             position: relative;
         }
 
-        /* Dynamic Island */
+        /* Clean Dynamic Island (Zero Overlap with Status Bar) */
         .phone-island {
             position: absolute;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 110px;
-            height: 26px;
+            width: 96px;
+            height: 24px;
             background: #000000;
             border-radius: var(--radius-full);
             z-index: 40;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 12px;
+            padding: 0 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
         }
 
         .island-lens {
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             background: #111827;
             border-radius: 50%;
             border: 1px solid #1F2937;
         }
 
         .island-indicator {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: var(--emerald);
             box-shadow: 0 0 8px var(--emerald);
         }
 
-        /* Screen Status Bar */
+        /* Status Bar (Clean Left & Right Wings) */
         .screen-status-bar {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 44px;
-            padding: 10px 22px 0;
+            height: 42px;
+            padding: 12px 18px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -515,21 +531,34 @@
             font-weight: 700;
             color: #ffffff;
             z-index: 35;
-            background: linear-gradient(180deg, rgba(11, 16, 29, 0.8) 0%, transparent 100%);
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(8, 12, 22, 0.9) 0%, rgba(8, 12, 22, 0.3) 70%, transparent 100%);
         }
 
-        .status-pill {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--emerald-light);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 0.04em;
+        .status-bar-left {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+        }
+
+        .status-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.68rem;
+        }
+
+        .status-offline-tag {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--emerald-light);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 1px 6px;
+            border-radius: var(--radius-full);
+            font-size: 0.6rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 3px;
         }
 
         /* Screen Deck Container */
@@ -544,7 +573,7 @@
             inset: 0;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.35s ease, transform 0.35s ease;
             transform: scale(0.97);
             overflow: hidden;
         }
@@ -564,350 +593,470 @@
         }
 
         /* =====================================================================
-           DYNAMIC INTERACTIVE OVERLAYS ON PHONE
+           SLIDE 0: REALISTIC CAMERA VIEW & PIXEL-PERFECT OCR BOUNDING BOXES
            ===================================================================== */
-        
-        /* 1. CAMERA OCR SCANNER OVERLAY */
-        .camera-scanner-wrapper {
+        .camera-viewfinder {
             width: 100%;
             height: 100%;
-            background: #000000;
+            background: #090D17;
             position: relative;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        .camera-backdrop {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, #1a2336 0%, #080d1a 100%);
+        /* Top Camera Bar */
+        .cam-top-hud {
+            height: 78px;
+            padding-top: 42px;
+            padding-left: 16px;
+            padding-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 25;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+        }
+
+        .cam-hud-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: var(--emerald-light);
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .cam-hud-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #94A3B8;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        /* Central Capture Viewport */
+        .cam-viewport-stage {
+            flex: 1;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px 18px;
         }
 
-        .receipt-paper {
+        /* Thermal Receipt Paper Container (800x760 natural ratio) */
+        .receipt-card-stage {
             width: 250px;
-            height: 480px;
-            background: #FAFAFA;
-            border-radius: 8px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            overflow: hidden;
+            height: 238px; /* Perfectly matches 800x760 cropped ratio */
             position: relative;
-            border-top: 4px solid #E2E8F0;
+            background: #FAFAFA;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
         }
 
-        .receipt-paper-img {
+        .receipt-cropped-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        /* Laser Sweep Line */
-        .laser-sweep {
+        /* Camera Corner Viewfinder Brackets */
+        .corner-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--emerald);
+            border-style: solid;
+            pointer-events: none;
+            z-index: 20;
+        }
+        .corner-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-top-left-radius: 6px; }
+        .corner-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-top-right-radius: 6px; }
+        .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-bottom-left-radius: 6px; }
+        .corner-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-bottom-right-radius: 6px; }
+
+        /* Scanning Laser Sweep within Document */
+        .doc-laser-sweep {
             position: absolute;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 2px;
             background: linear-gradient(90deg, transparent, #34D399, #10B981, #34D399, transparent);
-            box-shadow: 0 0 15px #10B981, 0 0 25px #10B981;
-            z-index: 25;
-            animation: laserSweepLoop 2.4s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px #10B981, 0 0 18px #10B981;
+            z-index: 22;
+            animation: docLaserMove 2.2s ease-in-out infinite alternate;
         }
 
-        @keyframes laserSweepLoop {
-            0% { top: 12%; }
-            100% { top: 88%; }
+        @keyframes docLaserMove {
+            0% { top: 2%; }
+            100% { top: 96%; }
         }
 
-        /* Scanning Bounding Box Highlights */
-        .scan-box {
+        /* Pixel-Perfect Bounding Boxes over Receipt */
+        .exact-scan-box {
             position: absolute;
             border: 2px solid var(--emerald);
             background: rgba(16, 185, 129, 0.22);
-            border-radius: 4px;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-            z-index: 20;
-            transition: all 0.3s ease;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            z-index: 18;
+            pointer-events: none;
         }
 
-        .scan-box-tag {
+        .exact-scan-tag {
             position: absolute;
-            top: -18px;
+            top: -16px;
             left: 0;
             background: var(--emerald);
             color: #ffffff;
-            font-size: 0.58rem;
+            font-size: 0.52rem;
             font-weight: 800;
-            padding: 1px 5px;
-            border-radius: 3px;
+            padding: 1px 4px;
+            border-radius: 2px;
             white-space: nowrap;
             letter-spacing: 0.02em;
         }
 
-        .box-merchant {
-            top: 100px;
-            left: 30px;
-            right: 30px;
-            height: 36px;
+        /* Exact Coordinates derived from 800x760 cropped image */
+        .box-exact-merchant {
+            top: 5.2%;
+            left: 28%;
+            width: 44%;
+            height: 7%;
         }
 
-        .box-date {
-            top: 175px;
-            left: 30px;
-            width: 120px;
-            height: 24px;
+        .box-exact-date {
+            top: 15.5%;
+            left: 30%;
+            width: 40%;
+            height: 7%;
         }
 
-        .box-tax {
-            bottom: 155px;
-            right: 30px;
-            width: 100px;
-            height: 24px;
+        .box-exact-tax {
+            top: 57.5%;
+            left: 68%;
+            width: 25%;
+            height: 7%;
         }
 
-        .box-total {
-            bottom: 115px;
-            left: 30px;
-            right: 30px;
-            height: 32px;
+        .box-exact-total {
+            top: 68.2%;
+            left: 6%;
+            width: 88%;
+            height: 7.5%;
             border-color: #3B82F6;
-            background: rgba(59, 130, 246, 0.25);
+            background: rgba(59, 130, 246, 0.22);
         }
 
-        .box-total .scan-box-tag {
+        .box-exact-total .exact-scan-tag {
             background: #3B82F6;
         }
 
-        .cam-controls-bar {
-            position: absolute;
-            bottom: 18px;
-            left: 0;
-            right: 0;
+        /* Bottom Camera Controls Bar */
+        .cam-bottom-hud {
+            height: 85px;
+            padding: 0 24px 14px;
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            z-index: 30;
-            padding: 0 20px;
+            justify-content: space-between;
+            z-index: 25;
+            background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 100%);
         }
 
-        .cam-shutter-btn {
-            width: 60px;
-            height: 60px;
+        .cam-hud-subtext {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            font-weight: 700;
+            width: 70px;
+        }
+
+        .cam-shutter-outer {
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             border: 3px solid #ffffff;
-            background: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
         }
 
-        .cam-shutter-inner {
-            width: 48px;
-            height: 48px;
+        .cam-shutter-core {
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: #ffffff;
             transition: transform 0.15s ease;
         }
 
-        /* 2. GPS MILEAGE ANIMATION OVERLAY */
-        .gps-overlay-card {
+        /* =====================================================================
+           SLIDE 1: COMPACT FLOATING GPS DRIVE HUD (NO OCCLUSION)
+           ===================================================================== */
+        .gps-compact-hud {
             position: absolute;
-            bottom: 60px;
-            left: 16px;
-            right: 16px;
-            background: rgba(14, 19, 31, 0.95);
+            top: 50px;
+            left: 14px;
+            right: 14px;
+            background: rgba(11, 16, 28, 0.95);
             border: 1px solid rgba(59, 130, 246, 0.4);
             border-radius: var(--radius-md);
-            padding: 16px;
-            backdrop-filter: blur(12px);
+            padding: 12px 14px;
+            backdrop-filter: blur(14px);
             z-index: 25;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         }
 
-        .gps-overlay-top {
+        .gps-hud-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .gps-live-badge {
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--blue-light);
+        .gps-beacon-pill {
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--blue-light);
         }
 
-        .gps-pulse-dot {
-            width: 8px;
-            height: 8px;
+        .gps-radar-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: var(--blue);
-            box-shadow: 0 0 10px var(--blue);
-            animation: pulseGlow 1.5s infinite;
+            box-shadow: 0 0 8px var(--blue);
+            animation: radarPulse 1.5s infinite;
         }
 
-        @keyframes pulseGlow {
+        @keyframes radarPulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.3); }
+            50% { opacity: 0.4; transform: scale(1.4); }
         }
 
-        .gps-stat-grid {
+        .gps-metrics-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding-top: 8px;
+            gap: 8px;
+            padding-top: 6px;
             border-top: 1px solid var(--border-subtle);
         }
 
-        .gps-val-label {
-            font-size: 0.65rem;
+        .metric-label {
+            font-size: 0.6rem;
             color: var(--text-muted);
             font-weight: 700;
             text-transform: uppercase;
         }
 
-        .gps-val-number {
-            font-size: 1.25rem;
+        .metric-val {
+            font-size: 1.15rem;
             font-weight: 800;
             color: #ffffff;
             font-family: var(--font-mono);
+            line-height: 1.2;
         }
 
-        .gps-val-number.earned {
+        .metric-val.emerald {
             color: var(--emerald-light);
         }
 
-        /* 3. DUAL ACCOUNTING FILTER OVERLAY */
-        .pakka-filter-pill-bar {
+        /* =====================================================================
+           SLIDE 2: CLEAN CALLOUT SPOTLIGHT (NO DUPLICATE BUTTONS)
+           ===================================================================== */
+        .spotlight-pakka-callout {
             position: absolute;
-            top: 125px;
-            left: 20px;
-            right: 20px;
-            background: rgba(14, 19, 31, 0.95);
-            border: 1px solid var(--border-highlight);
-            padding: 8px;
+            top: 230px;
+            left: 14px;
+            right: 14px;
+            background: rgba(11, 16, 28, 0.95);
+            border: 1px solid rgba(16, 185, 129, 0.4);
             border-radius: var(--radius-md);
+            padding: 12px 14px;
+            backdrop-filter: blur(12px);
             z-index: 25;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
             display: flex;
-            gap: 8px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            align-items: center;
+            gap: 12px;
         }
 
-        .pill-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            border: none;
-            font-size: 0.72rem;
+        .spotlight-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--emerald-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .spotlight-text h5 {
+            font-size: 0.8rem;
             font-weight: 800;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .pill-btn.active-pakka {
-            background: var(--emerald);
             color: #ffffff;
+            margin-bottom: 2px;
         }
 
-        .pill-btn.inactive {
-            background: rgba(255, 255, 255, 0.05);
+        .spotlight-text p {
+            font-size: 0.68rem;
             color: var(--text-secondary);
-        }
-
-        /* 4. CPA TAX REPORT POPUP OVERLAY */
-        .cpa-report-sheet {
-            position: absolute;
-            top: 100px;
-            left: 18px;
-            right: 18px;
-            bottom: 60px;
-            background: #ffffff;
-            color: #0F172A;
-            border-radius: var(--radius-md);
-            padding: 20px 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
-            z-index: 25;
-            overflow-y: auto;
-            transform: scale(0.96);
-            transition: transform 0.3s ease;
-        }
-
-        .sheet-header {
-            border-bottom: 2px solid #0F172A;
-            padding-bottom: 10px;
-            margin-bottom: 14px;
-        }
-
-        .sheet-title {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: -0.01em;
-        }
-
-        .sheet-subtitle {
-            font-size: 0.65rem;
-            color: #64748B;
-            font-weight: 700;
-        }
-
-        .sheet-line {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            padding: 6px 0;
-            border-bottom: 1px dashed #E2E8F0;
-        }
-
-        .sheet-line strong {
-            font-family: var(--font-mono);
-            color: #0F172A;
-        }
-
-        .sheet-total-row {
-            margin-top: 14px;
-            padding-top: 10px;
-            border-top: 2px solid #0F172A;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.88rem;
-            font-weight: 800;
-        }
-
-        .sheet-total-row span.amt {
-            color: #059669;
-            font-family: var(--font-mono);
+            line-height: 1.35;
         }
 
         /* =====================================================================
-           RIGHT COLUMN: DETAILED EXPLAINER CARDS & INSIGHTS
+           SLIDE 3: MODERN SCHEDULE C TAX REPORT MODAL
+           ===================================================================== */
+        .cpa-report-modal {
+            position: absolute;
+            top: 50px;
+            left: 12px;
+            right: 12px;
+            bottom: 20px;
+            background: #0E1424;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            z-index: 25;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .modal-drag-handle {
+            width: 36px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 0 auto 12px;
+        }
+
+        .modal-doc-header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .modal-doc-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-doc-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .modal-doc-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.07);
+            color: var(--text-secondary);
+        }
+
+        .modal-doc-line strong {
+            font-family: var(--font-mono);
+            color: #ffffff;
+        }
+
+        .modal-total-bar {
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .modal-total-bar span.tot-val {
+            color: var(--emerald-light);
+            font-family: var(--font-mono);
+        }
+
+        .modal-appendix-pill {
+            margin-top: 10px;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.64rem;
+            color: var(--blue-light);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-action-row {
+            margin-top: auto;
+            padding-top: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .modal-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: #ffffff;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .modal-btn.primary {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: #ffffff;
+        }
+
+        /* =====================================================================
+           RIGHT COLUMN: EXPLAINER DECK
            ===================================================================== */
         .explainer-deck {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .explainer-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 28px;
-            transition: all 0.3s ease;
+            padding: 26px;
+            transition: all 0.25s ease;
             position: relative;
         }
 
         .explainer-card.active {
             border-color: rgba(59, 130, 246, 0.4);
-            background: linear-gradient(135deg, rgba(20, 27, 45, 0.9) 0%, rgba(26, 36, 59, 0.9) 100%);
+            background: linear-gradient(135deg, rgba(18, 25, 43, 0.95) 0%, rgba(24, 34, 59, 0.95) 100%);
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
         }
 
@@ -915,19 +1064,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .explainer-tag {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 800;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: var(--radius-full);
             background: rgba(59, 130, 246, 0.15);
             color: var(--blue-light);
             border: 1px solid rgba(59, 130, 246, 0.3);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
 
         .explainer-tag.emerald {
@@ -937,99 +1088,98 @@
         }
 
         .explainer-title {
-            font-size: 1.45rem;
+            font-size: 1.35rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             line-height: 1.3;
         }
 
         .explainer-desc {
             color: var(--text-secondary);
-            font-size: 0.96rem;
+            font-size: 0.94rem;
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .explainer-bullets {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 8px;
         }
 
         .bullet-item {
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-primary);
         }
 
         .bullet-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: rgba(16, 185, 129, 0.15);
             color: var(--emerald-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         /* =====================================================================
-           BENTO GRID FEATURES SECTION
+           BENTO GRID FEATURES
            ===================================================================== */
         .section {
-            padding: 80px 0;
+            padding: 70px 0;
         }
 
         .section-header {
             text-align: center;
-            max-width: 760px;
-            margin: 0 auto 56px;
+            max-width: 740px;
+            margin: 0 auto 50px;
         }
 
         .section-tag {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: var(--emerald-light);
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: inline-block;
         }
 
         .section-title {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-size: clamp(1.7rem, 3.8vw, 2.6rem);
             font-weight: 800;
             letter-spacing: -0.02em;
             line-height: 1.2;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .section-subtitle {
             color: var(--text-secondary);
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.6;
         }
 
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 22px;
         }
 
         .bento-card {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 32px;
+            padding: 28px;
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .bento-card:hover {
@@ -1043,8 +1193,8 @@
         }
 
         .bento-icon-box {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: var(--radius-md);
             background: rgba(59, 130, 246, 0.12);
             border: 1px solid rgba(59, 130, 246, 0.25);
@@ -1052,7 +1202,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .bento-icon-box.emerald {
@@ -1068,15 +1218,15 @@
         }
 
         .bento-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: -0.01em;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .bento-card p {
             color: var(--text-secondary);
-            font-size: 0.94rem;
+            font-size: 0.92rem;
             line-height: 1.6;
         }
 
@@ -1086,55 +1236,53 @@
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            position: relative;
+            gap: 22px;
         }
 
         .step-card {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 32px 24px;
+            padding: 28px 22px;
             text-align: center;
-            position: relative;
         }
 
         .step-number {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 100%);
             color: #ffffff;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+            margin: 0 auto 18px;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
         }
 
         .step-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .step-card p {
             color: var(--text-secondary);
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
 
         /* =====================================================================
-           FAQ ACCORDION SECTION
+           FAQ ACCORDION
            ===================================================================== */
         .faq-wrapper {
-            max-width: 840px;
+            max-width: 820px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         .faq-item {
@@ -1153,10 +1301,10 @@
             width: 100%;
             background: transparent;
             border: none;
-            padding: 22px 24px;
+            padding: 20px 22px;
             color: var(--text-primary);
             font-family: var(--font-main);
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             font-weight: 700;
             text-align: left;
             cursor: pointer;
@@ -1190,26 +1338,26 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
-            padding: 0 24px;
+            padding: 0 22px;
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 0.94rem;
             line-height: 1.65;
         }
 
         .faq-item.active .faq-answer {
             max-height: 300px;
-            padding-bottom: 22px;
+            padding-bottom: 20px;
         }
 
         /* =====================================================================
            FOOTER
            ===================================================================== */
         footer {
-            background: #05070B;
+            background: #04060A;
             border-top: 1px solid var(--border-subtle);
-            padding: 60px 0 32px;
+            padding: 50px 0 30px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
         }
 
@@ -1217,16 +1365,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .footer-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 28px;
-            margin-bottom: 32px;
+            gap: 24px;
+            margin-bottom: 28px;
         }
 
         .footer-link {
@@ -1241,7 +1389,7 @@
         }
 
         .footer-copy {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
 
@@ -1249,7 +1397,7 @@
         @media (max-width: 1024px) {
             .showcase-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 36px;
             }
             .device-container {
                 order: 1;
@@ -1266,8 +1414,32 @@
         }
 
         @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 0;
+            }
+            .nav-links {
+                display: none;
+            }
+            .showcase-wrapper {
+                padding: 20px 14px;
+            }
             .showcase-tabs {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .tab-btn {
+                padding: 10px 12px;
+            }
+            .tab-title-text {
+                font-size: 0.82rem;
+            }
+            .phone-mockup {
+                width: 320px;
+                height: 650px;
+            }
+            .receipt-card-stage {
+                width: 220px;
+                height: 209px;
             }
             .bento-grid, .steps-grid {
                 grid-template-columns: 1fr;
@@ -1275,15 +1447,16 @@
             .bento-card.col-span-2 {
                 grid-column: span 1;
             }
-            .nav-links {
-                display: none;
-            }
+        }
+
+        @media (max-width: 380px) {
             .phone-mockup {
-                width: 320px;
-                height: 650px;
+                width: 290px;
+                height: 600px;
             }
-            .showcase-wrapper {
-                padding: 24px 16px;
+            .receipt-card-stage {
+                width: 200px;
+                height: 190px;
             }
         }
     </style>
@@ -1318,7 +1491,7 @@
                 </nav>
 
                 <a href="#interactive-demo" class="nav-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <polygon points="5 3 19 12 5 21 5 3"/>
                     </svg>
                     Explore App Tour
@@ -1331,7 +1504,7 @@
     <section class="hero">
         <div class="container">
             <div class="hero-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
                 Engineered for Contractors, Freelancers, Gig Drivers &amp; Small Businesses
@@ -1343,30 +1516,30 @@
             </h1>
 
             <p class="hero-subtitle">
-                Point and scan receipts with on-device neural OCR, track GPS drives in real-time, and export itemized Schedule C reports. Your financial data stays 100% on your device in secure local SQLite storage.
+                Point and scan receipts with on-device neural OCR, track GPS drives in real-time, and export itemized Schedule C reports. Your financial records stay 100% on your device in secure local SQLite storage.
             </p>
 
             <div class="hero-highlights-bar">
                 <div class="highlight-chip">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <polyline points="20 6 9 17 4 12"/>
                     </svg>
                     Zero Cloud Uploads (Airplane Ready)
                 </div>
                 <div class="highlight-chip">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <polyline points="20 6 9 17 4 12"/>
                     </svg>
                     Sub-250ms On-Device Neural OCR
                 </div>
                 <div class="highlight-chip">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <polyline points="20 6 9 17 4 12"/>
                     </svg>
                     45+ Statutory Tax Jurisdiction Rates
                 </div>
                 <div class="highlight-chip">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <polyline points="20 6 9 17 4 12"/>
                     </svg>
                     Pakka vs. Kachha Dual Accounting
@@ -1391,7 +1564,7 @@
 
                     <div class="tour-controls">
                         <button class="tour-btn active" id="btnToggleTour" onclick="toggleTour()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="tourIcon">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" id="tourIcon">
                                 <rect x="6" y="4" width="4" height="16"/>
                                 <rect x="14" y="4" width="4" height="16"/>
                             </svg>
@@ -1403,47 +1576,39 @@
                 <!-- 4 Step Tabs -->
                 <div class="showcase-tabs">
                     <button class="tab-btn active" id="tab0" onclick="selectFlow(0)">
-                        <div class="tab-btn-step">
-                            <span>Step 1</span>
+                        <div class="tab-header-row">
+                            <span>STEP 1</span>
                             <span class="tab-badge">OCR</span>
                         </div>
-                        <div class="tab-btn-label">
-                            📷 Point &amp; Scan Receipt
-                        </div>
-                        <div class="tab-progress" id="progress0"></div>
+                        <div class="tab-title-text">📷 Point &amp; Scan</div>
+                        <div class="tab-progress-bar" id="progress0"></div>
                     </button>
 
                     <button class="tab-btn" id="tab1" onclick="selectFlow(1)">
-                        <div class="tab-btn-step">
-                            <span>Step 2</span>
+                        <div class="tab-header-row">
+                            <span>STEP 2</span>
                             <span class="tab-badge">GPS</span>
                         </div>
-                        <div class="tab-btn-label">
-                            🚗 Live Mileage Drive
-                        </div>
-                        <div class="tab-progress" id="progress1"></div>
+                        <div class="tab-title-text">🚗 Mileage Drive</div>
+                        <div class="tab-progress-bar" id="progress1"></div>
                     </button>
 
                     <button class="tab-btn" id="tab2" onclick="selectFlow(2)">
-                        <div class="tab-btn-step">
-                            <span>Step 3</span>
-                            <span class="tab-badge">Accounting</span>
+                        <div class="tab-header-row">
+                            <span>STEP 3</span>
+                            <span class="tab-badge">AUDIT</span>
                         </div>
-                        <div class="tab-btn-label">
-                            📑 Pakka vs. Kachha
-                        </div>
-                        <div class="tab-progress" id="progress2"></div>
+                        <div class="tab-title-text">📑 Dual Accounting</div>
+                        <div class="tab-progress-bar" id="progress2"></div>
                     </button>
 
                     <button class="tab-btn" id="tab3" onclick="selectFlow(3)">
-                        <div class="tab-btn-step">
-                            <span>Step 4</span>
-                            <span class="tab-badge">Reports</span>
+                        <div class="tab-header-row">
+                            <span>STEP 4</span>
+                            <span class="tab-badge">CPA</span>
                         </div>
-                        <div class="tab-btn-label">
-                            📊 CPA Tax Export
-                        </div>
-                        <div class="tab-progress" id="progress3"></div>
+                        <div class="tab-title-text">📊 Tax Reports</div>
+                        <div class="tab-progress-bar" id="progress3"></div>
                     </button>
                 </div>
 
@@ -1454,151 +1619,182 @@
                     <div class="device-container">
                         <div class="phone-mockup">
                             
-                            <!-- Dynamic Island -->
+                            <!-- Dynamic Island (Zero Overlap with Status Bar) -->
                             <div class="phone-island">
                                 <div class="island-lens"></div>
                                 <div class="island-indicator"></div>
                             </div>
 
-                            <!-- Screen Container -->
+                            <!-- Phone Screen -->
                             <div class="phone-screen">
 
-                                <!-- Screen Status Bar -->
+                                <!-- Status Bar (Clock on Left, Status + Battery on Right) -->
                                 <div class="screen-status-bar">
-                                    <span>9:41</span>
-                                    <div class="status-pill">
-                                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                        </svg>
-                                        100% OFFLINE
+                                    <div class="status-bar-left">
+                                        <span>9:41</span>
                                     </div>
-                                    <span>100% 🔋</span>
+                                    <div class="status-bar-right">
+                                        <div class="status-offline-tag">
+                                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            </svg>
+                                            OFFLINE
+                                        </div>
+                                        <span>100% 🔋</span>
+                                    </div>
                                 </div>
 
                                 <!-- Screen Deck of Slides -->
                                 <div class="screen-deck">
 
-                                    <!-- SLIDE 0: REALISTIC CAMERA OCR SCANNER -->
+                                    <!-- SLIDE 0: PIXEL-PERFECT CAMERA OCR VIEW -->
                                     <div class="screen-slide active" id="slide0">
-                                        <div class="camera-scanner-wrapper">
-                                            <div class="camera-backdrop">
-                                                <!-- Realistic Physical Receipt Graphic -->
-                                                <div class="receipt-paper">
-                                                    <img src="assets/shell_receipt.png" alt="Thermal Receipt Scan" class="receipt-paper-img">
+                                        <div class="camera-viewfinder">
+                                            <!-- Top Camera HUD -->
+                                            <div class="cam-top-hud">
+                                                <div class="cam-hud-badge">
+                                                    <span>⚡ Offline ML Kit</span>
+                                                </div>
+                                                <div class="cam-hud-actions">
+                                                    <span>Auto-Flash ⚡</span>
+                                                    <span>Grid ⊞</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Camera Viewport Stage -->
+                                            <div class="cam-viewport-stage">
+                                                <div class="receipt-card-stage">
+                                                    <!-- Cropped Authentic Thermal Receipt -->
+                                                    <img src="assets/shell_receipt_cropped.png" alt="Thermal Receipt Scan" class="receipt-cropped-img">
+
+                                                    <!-- 4 Corner Detection Brackets -->
+                                                    <div class="corner-bracket corner-tl"></div>
+                                                    <div class="corner-bracket corner-tr"></div>
+                                                    <div class="corner-bracket corner-bl"></div>
+                                                    <div class="corner-bracket corner-br"></div>
 
                                                     <!-- Animated Laser Sweep -->
-                                                    <div class="laser-sweep"></div>
+                                                    <div class="doc-laser-sweep"></div>
 
-                                                    <!-- Neural OCR Bounding Boxes -->
-                                                    <div class="scan-box box-merchant">
-                                                        <div class="scan-box-tag">MERCHANT: SHELL OIL</div>
+                                                    <!-- Exact Bounding Boxes -->
+                                                    <div class="exact-scan-box box-exact-merchant">
+                                                        <div class="exact-scan-tag">MERCHANT ✓</div>
                                                     </div>
 
-                                                    <div class="scan-box box-date">
-                                                        <div class="scan-box-tag">DATE: NOV 20, 2026</div>
+                                                    <div class="exact-scan-box box-exact-date">
+                                                        <div class="exact-scan-tag">DATE ✓</div>
                                                     </div>
 
-                                                    <div class="scan-box box-tax">
-                                                        <div class="scan-box-tag">TAX: $4.89</div>
+                                                    <div class="exact-scan-box box-exact-tax">
+                                                        <div class="exact-scan-tag">TAX ✓</div>
                                                     </div>
 
-                                                    <div class="scan-box box-total">
-                                                        <div class="scan-box-tag">TOTAL: $64.19</div>
+                                                    <div class="exact-scan-box box-exact-total">
+                                                        <div class="exact-scan-tag">TOTAL: $64.19 ✓</div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Camera HUD Controls -->
-                                            <div class="cam-controls-bar">
-                                                <div style="font-size: 0.68rem; color: #94A3B8; font-weight: 700;">⚡ On-Device Neural C++</div>
-                                                <div class="cam-shutter-btn">
-                                                    <div class="cam-shutter-inner"></div>
+                                            <!-- Bottom Camera Controls HUD -->
+                                            <div class="cam-bottom-hud">
+                                                <div class="cam-hud-subtext">🖼️ Gallery</div>
+                                                <div class="cam-shutter-outer">
+                                                    <div class="cam-shutter-core"></div>
                                                 </div>
-                                                <div style="font-size: 0.68rem; color: var(--emerald-light); font-weight: 700;">Locked 🎯</div>
+                                                <div class="cam-hud-subtext" style="text-align: right; color: var(--emerald-light);">Locked 🎯</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- SLIDE 1: REAL MILEAGE TRACKER SCREEN WITH LIVE DRIVE HUD -->
+                                    <!-- SLIDE 1: REAL MILEAGE SCREEN WITH COMPACT ACTIVE DRIVE HUD -->
                                     <div class="screen-slide" id="slide1">
                                         <img src="assets/04_mileage_tracker.png" alt="Mileage Tracker App Screen" class="screen-img">
                                         
-                                        <!-- Live Driving Stats Overlay -->
-                                        <div class="gps-overlay-card">
-                                            <div class="gps-overlay-top">
-                                                <div class="gps-live-badge">
-                                                    <div class="gps-pulse-dot"></div>
-                                                    <span>LIVE GPS DRIVE RECORDING</span>
+                                        <!-- Sleek Compact Live Drive HUD -->
+                                        <div class="gps-compact-hud">
+                                            <div class="gps-hud-header">
+                                                <div class="gps-beacon-pill">
+                                                    <div class="gps-radar-dot"></div>
+                                                    <span>ACTIVE BUSINESS DRIVE</span>
                                                 </div>
-                                                <span style="font-size: 0.65rem; color: var(--emerald-light); font-weight: 800;">Accuracy 4.1m</span>
+                                                <span style="font-size: 0.62rem; color: var(--emerald-light); font-weight: 800;">4.1m Fix</span>
                                             </div>
-                                            <div class="gps-stat-grid">
+                                            <div class="gps-metrics-row">
                                                 <div>
-                                                    <div class="gps-val-label">Distance (IRS $0.76/mi)</div>
-                                                    <div class="gps-val-number" id="gpsMilesTicker">28.5 mi</div>
+                                                    <div class="metric-label">IRS $0.76/MI RATE</div>
+                                                    <div class="metric-val" id="gpsMilesTicker">28.5 mi</div>
                                                 </div>
                                                 <div style="text-align: right;">
-                                                    <div class="gps-val-label">Tax Deduction Earned</div>
-                                                    <div class="gps-val-number earned" id="gpsEarnedTicker">+$21.66</div>
+                                                    <div class="metric-label">DEDUCTION EARNED</div>
+                                                    <div class="metric-val emerald" id="gpsEarnedTicker">+$21.66</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- SLIDE 2: REAL RECEIPTS SCREEN WITH PAKKA/KACHHA TOGGLE -->
+                                    <!-- SLIDE 2: REAL RECEIPTS SCREEN WITH CALLOUT SPOTLIGHT -->
                                     <div class="screen-slide" id="slide2">
                                         <img src="assets/02_receipt_scanner.png" alt="Itemized Receipts Screen" class="screen-img">
 
-                                        <!-- Interactive Filter Demo Pill Bar -->
-                                        <div class="pakka-filter-pill-bar">
-                                            <button class="pill-btn active-pakka" id="pillPakka">
-                                                ✓ Tax Bill (Pakka)
-                                            </button>
-                                            <button class="pill-btn inactive" id="pillKachha">
-                                                Cash Memo (Kachha)
-                                            </button>
+                                        <!-- Non-occluding Spotlight Callout -->
+                                        <div class="spotlight-pakka-callout">
+                                            <div class="spotlight-icon-box">🛡️</div>
+                                            <div class="spotlight-text">
+                                                <h5>Dual Accounting Segregation</h5>
+                                                <p>Separates formal GST/VAT Tax Bills (*Pakka*) from internal cash memos (*Kachha*).</p>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <!-- SLIDE 3: REAL TAX REPORTS WITH CPA SCHEDULE C SHEET -->
+                                    <!-- SLIDE 3: REAL TAX REPORTS WITH COMPACT SCHEDULE C MODAL -->
                                     <div class="screen-slide" id="slide3">
                                         <img src="assets/05_tax_reports.png" alt="Tax Reports Screen" class="screen-img">
 
-                                        <!-- Animated CPA Schedule C Sheet -->
-                                        <div class="cpa-report-sheet">
-                                            <div class="sheet-header">
-                                                <div class="sheet-title">IRS FORM 1040 SCHEDULE C</div>
-                                                <div class="sheet-subtitle">Itemized Deductions Summary • Tax Year 2026</div>
+                                        <!-- Clean Schedule C Tax Summary Modal -->
+                                        <div class="cpa-report-modal">
+                                            <div class="modal-drag-handle"></div>
+                                            <div class="modal-doc-header">
+                                                <div class="modal-doc-title">
+                                                    <span>SCHEDULE C DEDUCTIONS</span>
+                                                    <span style="font-size: 0.62rem; color: var(--emerald-light);">2026 TAX YEAR</span>
+                                                </div>
+                                                <div class="modal-doc-sub">IRS Form 1040 Audit-Proof Summary</div>
                                             </div>
 
-                                            <div class="sheet-line">
+                                            <div class="modal-doc-line">
                                                 <span>Line 9: Car &amp; Truck (85.3 mi)</span>
                                                 <strong>$64.83</strong>
                                             </div>
-                                            <div class="sheet-line">
+                                            <div class="modal-doc-line">
                                                 <span>Line 20: Equipment &amp; Tools</span>
                                                 <strong>$139.04</strong>
                                             </div>
-                                            <div class="sheet-line">
+                                            <div class="modal-doc-line">
                                                 <span>Line 24b: Meals &amp; Dining (50%)</span>
                                                 <strong>$18.75</strong>
                                             </div>
-                                            <div class="sheet-line">
+                                            <div class="modal-doc-line">
                                                 <span>Line 22: Fuel &amp; Auto (Pakka)</span>
                                                 <strong>$64.19</strong>
                                             </div>
-                                            <div class="sheet-line">
+                                            <div class="modal-doc-line">
                                                 <span>Line 18: Office Expenses</span>
                                                 <strong>$48.50</strong>
                                             </div>
 
-                                            <div class="sheet-total-row">
+                                            <div class="modal-total-bar">
                                                 <span>TOTAL DEDUCTIBLE:</span>
-                                                <span class="amt">$335.31</span>
+                                                <span class="tot-val">$335.31</span>
                                             </div>
 
-                                            <div style="margin-top: 14px; font-size: 0.65rem; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px;">
-                                                📎 4 Scaled Thermal Receipt Photos Appended
+                                            <div class="modal-appendix-pill">
+                                                <span>📎</span>
+                                                <span>4 Scaled Thermal Receipts Appended</span>
+                                            </div>
+
+                                            <div class="modal-action-row">
+                                                <div class="modal-btn primary">📄 Export PDF</div>
+                                                <div class="modal-btn">📊 Export CSV</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1615,11 +1811,11 @@
                         <div class="explainer-card active" id="explain0">
                             <div class="explainer-top">
                                 <span class="explainer-tag emerald">Neural OCR Engine</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Sub-250ms Speed</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Sub-250ms Speed</span>
                             </div>
                             <h3 class="explainer-title">1. Point, Snap &amp; Instant Data Extraction</h3>
                             <p class="explainer-desc">
-                                Watch on-device Google ML Kit models process the physical thermal receipt right on your phone. It automatically isolates merchant name, purchase date, line-item totals, and sales tax with zero server round-trips.
+                                Watch on-device Google ML Kit models process physical thermal receipts right on your phone. It automatically isolates merchant name, purchase date, line-item totals, and sales tax with zero server round-trips.
                             </p>
                             <div class="explainer-bullets">
                                 <div class="bullet-item">
@@ -1641,11 +1837,11 @@
                         <div class="explainer-card" id="explain1" style="display: none;">
                             <div class="explainer-top">
                                 <span class="explainer-tag">Dual-Mode Mileage</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">IRS Standard: $0.76/mi</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">IRS Standard: $0.76/mi</span>
                             </div>
                             <h3 class="explainer-title">2. Live GPS Breadcrumbs &amp; Statutory Rate Math</h3>
                             <p class="explainer-desc">
-                                Start a business trip with one tap. High-accuracy foreground GPS logs your driving path, dynamically calculating accrued tax deductions in real-time. Prefer manual entry? Enter starting and ending odometer numbers in under 5 seconds.
+                                Start a business drive with one tap. High-accuracy foreground GPS logs your driving path, dynamically calculating accrued tax deductions in real-time. Prefer manual entry? Enter starting and ending odometer numbers in under 5 seconds.
                             </p>
                             <div class="explainer-bullets">
                                 <div class="bullet-item">
@@ -1667,7 +1863,7 @@
                         <div class="explainer-card" id="explain2" style="display: none;">
                             <div class="explainer-top">
                                 <span class="explainer-tag emerald">Audit-Proof Records</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Clean Tax Separation</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Clean Tax Separation</span>
                             </div>
                             <h3 class="explainer-title">3. Pakka vs. Kachha Dual Accounting</h3>
                             <p class="explainer-desc">
@@ -1693,7 +1889,7 @@
                         <div class="explainer-card" id="explain3" style="display: none;">
                             <div class="explainer-top">
                                 <span class="explainer-tag">CPA-Ready Exports</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">PDF + CSV Spreadsheets</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">PDF + CSV Spreadsheets</span>
                             </div>
                             <h3 class="explainer-title">4. Generate CPA PDF &amp; CSV Tax Reports</h3>
                             <p class="explainer-desc">
@@ -1740,7 +1936,7 @@
                 <!-- 1. Zero Cloud (Col Span 2) -->
                 <div class="bento-card col-span-2">
                     <div class="bento-icon-box emerald">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>
@@ -1754,7 +1950,7 @@
                 <!-- 2. On-Device ML Kit -->
                 <div class="bento-card">
                     <div class="bento-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                         </svg>
                     </div>
@@ -1767,7 +1963,7 @@
                 <!-- 3. Dual-Mode Mileage -->
                 <div class="bento-card">
                     <div class="bento-icon-box amber">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                         </svg>
@@ -1781,7 +1977,7 @@
                 <!-- 4. 45+ Statutory Tax Rates -->
                 <div class="bento-card">
                     <div class="bento-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                         </svg>
                     </div>
@@ -1794,7 +1990,7 @@
                 <!-- 5. CPA Tax Exports -->
                 <div class="bento-card">
                     <div class="bento-icon-box emerald">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                             <line x1="16" y1="13" x2="8" y2="13"/>
@@ -1814,7 +2010,7 @@
     <!-- =========================================================================
          HOW IT WORKS 3-STEP SECTION
          ========================================================================= -->
-    <section class="section" id="how-it-works" style="background: rgba(14, 19, 31, 0.5);">
+    <section class="section" id="how-it-works" style="background: rgba(11, 16, 28, 0.5);">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Simple &amp; Efficient</span>
@@ -1945,8 +2141,8 @@
     <footer>
         <div class="container">
             <div class="footer-brand">
-                <img src="assets/play_store_icon_512.png" alt="App Icon" style="width: 32px; height: 32px; border-radius: 8px;">
-                <strong style="color: var(--text-primary); font-size: 1rem;">Receipt Scanner &amp; Mileage Log</strong>
+                <img src="assets/play_store_icon_512.png" alt="App Icon" style="width: 30px; height: 30px; border-radius: 7px;">
+                <strong style="color: var(--text-primary); font-size: 0.95rem;">Receipt Scanner &amp; Mileage Log</strong>
             </div>
 
             <div class="footer-links">
@@ -1968,7 +2164,7 @@
     <script>
         let currentFlow = 0;
         let isTourPlaying = true;
-        let tourInterval = null;
+        let tourTimer = null;
         let progressInterval = null;
         let progressVal = 0;
         const DURATION = 6500; // 6.5s per flow
@@ -1980,7 +2176,6 @@
         }
 
         function updateShowcaseUI(index) {
-            // Update Tab states
             for (let i = 0; i < 4; i++) {
                 const tab = document.getElementById('tab' + i);
                 const slide = document.getElementById('slide' + i);
@@ -1997,26 +2192,22 @@
                     slide.classList.remove('active');
                     explain.style.display = 'none';
                     explain.classList.remove('active');
-                    progress.style.width = '0%';
+                    if (progress) progress.style.width = '0%';
                 }
             }
 
-            // Slide-specific dynamic micro-animations
             if (index === 1) {
-                // Animate GPS mileage counter
                 animateMileageCounter();
-            } else if (index === 2) {
-                // Animate Pakka / Kachha toggle
-                animatePakkaToggle();
             }
         }
 
         function animateMileageCounter() {
             const milesEl = document.getElementById('gpsMilesTicker');
             const earnedEl = document.getElementById('gpsEarnedTicker');
+            if (!milesEl || !earnedEl) return;
             let m = 0.0;
             const step = () => {
-                m += 1.9;
+                m += 2.1;
                 if (m > 28.5) m = 28.5;
                 milesEl.textContent = m.toFixed(1) + ' mi';
                 earnedEl.textContent = '+$' + (m * 0.76).toFixed(2);
@@ -2027,26 +2218,12 @@
             step();
         }
 
-        function animatePakkaToggle() {
-            const pillP = document.getElementById('pillPakka');
-            const pillK = document.getElementById('pillKachha');
-            setTimeout(() => {
-                if (currentFlow !== 2) return;
-                pillP.className = 'pill-btn inactive';
-                pillK.className = 'pill-btn active-pakka';
-                setTimeout(() => {
-                    if (currentFlow !== 2) return;
-                    pillK.className = 'pill-btn inactive';
-                    pillP.className = 'pill-btn active-pakka';
-                }, 1800);
-            }, 1200);
-        }
-
         function resetProgress() {
             clearInterval(progressInterval);
             progressVal = 0;
             for (let i = 0; i < 4; i++) {
-                document.getElementById('progress' + i).style.width = '0%';
+                const p = document.getElementById('progress' + i);
+                if (p) p.style.width = '0%';
             }
             if (isTourPlaying) {
                 startProgressBar();
@@ -2088,24 +2265,20 @@
                 label.textContent = 'Auto-Tour: Paused';
                 icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
                 clearInterval(progressInterval);
-                document.getElementById('progress' + currentFlow).style.width = '0%';
+                const activeProgress = document.getElementById('progress' + currentFlow);
+                if (activeProgress) activeProgress.style.width = '0%';
             }
         }
 
         function toggleFaq(btn) {
             const item = btn.parentElement;
             const isActive = item.classList.contains('active');
-            
-            // Close all
             document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('active'));
-
-            // Toggle selected
             if (!isActive) {
                 item.classList.add('active');
             }
         }
 
-        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             selectFlow(0);
         });
