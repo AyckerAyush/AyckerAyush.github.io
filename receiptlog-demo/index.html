@@ -482,48 +482,48 @@
             position: relative;
         }
 
-        /* Clean Dynamic Island (Zero Overlap with Status Bar) */
+        /* Clean Compact Dynamic Island (Zero Overlap with Status Bar) */
         .phone-island {
             position: absolute;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 96px;
-            height: 24px;
+            width: 76px;
+            height: 20px;
             background: #000000;
             border-radius: var(--radius-full);
             z-index: 40;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 10px;
+            padding: 0 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
         }
 
         .island-lens {
-            width: 9px;
-            height: 9px;
+            width: 8px;
+            height: 8px;
             background: #111827;
             border-radius: 50%;
             border: 1px solid #1F2937;
         }
 
         .island-indicator {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--emerald);
-            box-shadow: 0 0 8px var(--emerald);
+            box-shadow: 0 0 6px var(--emerald);
         }
 
-        /* Status Bar (Clean Left & Right Wings) */
+        /* Status Bar (Clock on Left, Status + Battery on Right with Generous Clearance) */
         .screen-status-bar {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 42px;
-            padding: 12px 18px 0;
+            height: 38px;
+            padding: 10px 18px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -532,7 +532,7 @@
             color: #ffffff;
             z-index: 35;
             pointer-events: none;
-            background: linear-gradient(180deg, rgba(8, 12, 22, 0.9) 0%, rgba(8, 12, 22, 0.3) 70%, transparent 100%);
+            background: linear-gradient(180deg, rgba(8, 12, 22, 0.95) 0%, rgba(8, 12, 22, 0.5) 75%, transparent 100%);
         }
 
         .status-bar-left {
@@ -544,17 +544,18 @@
         .status-bar-right {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.68rem;
+            gap: 5px;
+            font-size: 0.66rem;
+            color: var(--text-secondary);
         }
 
         .status-offline-tag {
             background: rgba(16, 185, 129, 0.2);
             color: var(--emerald-light);
             border: 1px solid rgba(16, 185, 129, 0.4);
-            padding: 1px 6px;
+            padding: 1px 5px;
             border-radius: var(--radius-full);
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -576,6 +577,13 @@
             transition: opacity 0.35s ease, transform 0.35s ease;
             transform: scale(0.97);
             overflow: hidden;
+            background: #080C16;
+        }
+
+        /* Provide top clearance for screenshot slides so app headers sit cleanly below status bar */
+        .screen-slide-screenshot {
+            padding-top: 36px;
+            background: #0B101C;
         }
 
         .screen-slide.active {
@@ -1628,18 +1636,18 @@
                             <!-- Phone Screen -->
                             <div class="phone-screen">
 
-                                <!-- Status Bar (Clock on Left, Status + Battery on Right) -->
+                                <!-- Status Bar (Clock & Offline Tag on Left, Battery on Right) -->
                                 <div class="screen-status-bar">
                                     <div class="status-bar-left">
                                         <span>9:41</span>
-                                    </div>
-                                    <div class="status-bar-right">
                                         <div class="status-offline-tag">
                                             <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                             </svg>
                                             OFFLINE
                                         </div>
+                                    </div>
+                                    <div class="status-bar-right">
                                         <span>100% 🔋</span>
                                     </div>
                                 </div>
@@ -1707,7 +1715,7 @@
                                     </div>
 
                                     <!-- SLIDE 1: REAL MILEAGE SCREEN WITH COMPACT ACTIVE DRIVE HUD -->
-                                    <div class="screen-slide" id="slide1">
+                                    <div class="screen-slide screen-slide-screenshot" id="slide1">
                                         <img src="assets/04_mileage_tracker.png" alt="Mileage Tracker App Screen" class="screen-img">
                                         
                                         <!-- Sleek Compact Live Drive HUD -->
@@ -1733,7 +1741,7 @@
                                     </div>
 
                                     <!-- SLIDE 2: REAL RECEIPTS SCREEN WITH CALLOUT SPOTLIGHT -->
-                                    <div class="screen-slide" id="slide2">
+                                    <div class="screen-slide screen-slide-screenshot" id="slide2">
                                         <img src="assets/02_receipt_scanner.png" alt="Itemized Receipts Screen" class="screen-img">
 
                                         <!-- Non-occluding Spotlight Callout -->
@@ -1747,7 +1755,7 @@
                                     </div>
 
                                     <!-- SLIDE 3: REAL TAX REPORTS WITH COMPACT SCHEDULE C MODAL -->
-                                    <div class="screen-slide" id="slide3">
+                                    <div class="screen-slide screen-slide-screenshot" id="slide3">
                                         <img src="assets/05_tax_reports.png" alt="Tax Reports Screen" class="screen-img">
 
                                         <!-- Clean Schedule C Tax Summary Modal -->
